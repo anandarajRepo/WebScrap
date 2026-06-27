@@ -8,16 +8,21 @@ Designed to be run once a day (via cron / Task Scheduler / launchd).
 It keeps a small "seen URLs" file so each run only reports NEW articles
 since the last run, and appends everything to a running CSV log.
 
-It can also fetch *all* articles across every category page and print them
-grouped date-wise (newest day first), which is handy for a quick overview.
+Both modes walk across *all* listing pages (/page/2/, /page/3/, ...), not just
+the first one, so a run is not limited to the ~10 articles on page 1:
+  * the default incremental run pages until it reaches articles it has already
+    seen, so it picks up every new article since the last run, and
+  * --all walks every page to the end and prints everything grouped date-wise
+    (newest day first), which is handy for a quick overview / full backfill.
 
 Install deps once:
     pip install requests beautifulsoup4 --break-system-packages
 
 Usage:
-    python3 main.py                # incremental run (only new articles)
+    python3 main.py                # incremental run (all new articles, all pages)
     python3 main.py --all          # fetch every page, list everything date-wise
     python3 main.py --all --pages 5  # cap how many pages to walk
+    python3 main.py --all --delay 0  # no pause between page requests
 """
 
 import argparse
@@ -25,6 +30,7 @@ import csv
 import json
 import os
 import re
+import time
 from collections import defaultdict
 from datetime import datetime, timezone
 
@@ -43,6 +49,14 @@ HEADERS = {
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SEEN_FILE = os.path.join(BASE_DIR, "tradebrains_orders_seen.json")
 LOG_FILE = os.path.join(BASE_DIR, "tradebrains_orders_log.csv")
+
+# Safety ceiling so a misbehaving site (e.g. one that loops back to page 1 for
+# out-of-range requests) can never spin us forever. The real stop signal is an
+# exhausted/looping listing, detected below; this is just a backstop.
+DEFAULT_MAX_PAGES = 500
+# Be polite: small pause between page requests so we don't hammer the server
+# (which also makes us less likely to get rate-limited / blocked).
+REQUEST_DELAY = 1.0
 
 # Date formats commonly emitted by WordPress themes in the listing markup.
 _DATE_FORMATS = (
@@ -164,18 +178,26 @@ def _page_url(page):
     return f"{URL.rstrip('/')}/page/{page}/"
 
 
-def fetch_articles(all_pages=False, max_pages=20):
-    """Return list of dicts: {title, url, date}.
+def fetch_articles(max_pages=DEFAULT_MAX_PAGES, stop_when_seen=None,
+                   delay=REQUEST_DELAY, verbose=False):
+    """Walk listing pages and return list of dicts: {title, url, date}.
 
-    By default fetches only the first listing page. With all_pages=True it walks
-    /page/2/, /page/3/, ... until a page yields no new articles (or 404s), up to
-    max_pages. Results are de-duped by URL while preserving discovery order.
+    Starts at the bare category URL (page 1) and follows /page/2/, /page/3/, ...
+    collecting every article it finds, de-duped by URL while preserving
+    discovery order. Walking stops when any of these happen:
+
+      * a page 404s (we've gone past the last page of results), or
+      * a page yields no URLs we haven't already collected this run (the listing
+        has run dry or looped back to an earlier page), or
+      * `stop_when_seen` is provided and a page contains nothing outside that set
+        -- an incremental short-circuit: the listing is newest-first, so once a
+        whole page is already known there is nothing newer left to find, or
+      * `max_pages` is reached (a safety backstop, not the normal terminator).
     """
     collected = []
     seen_in_batch = set()
-    last_page = max_pages if all_pages else 1
 
-    for page in range(1, last_page + 1):
+    for page in range(1, max_pages + 1):
         try:
             resp = requests.get(_page_url(page), headers=HEADERS, timeout=20)
             resp.raise_for_status()
@@ -189,15 +211,31 @@ def fetch_articles(all_pages=False, max_pages=20):
         page_articles = _parse_articles(soup)
 
         new_on_page = 0
+        unseen_on_page = 0
         for art in page_articles:
             if art["url"] not in seen_in_batch:
                 seen_in_batch.add(art["url"])
                 collected.append(art)
                 new_on_page += 1
+                if stop_when_seen is None or art["url"] not in stop_when_seen:
+                    unseen_on_page += 1
 
-        # No fresh URLs on this page => pagination has run dry, stop early.
-        if all_pages and new_on_page == 0:
+        if verbose:
+            print(f"  page {page}: {len(page_articles)} listed, "
+                  f"{new_on_page} new this run ({len(collected)} total)")
+
+        # No fresh URLs on this page => pagination has run dry / looped, stop.
+        if new_on_page == 0:
             break
+
+        # Incremental mode: this whole page is already known, so everything
+        # older is too. Nothing newer remains -- stop early.
+        if stop_when_seen is not None and unseen_on_page == 0:
+            break
+
+        # Polite pause before requesting the next page.
+        if delay and page < max_pages:
+            time.sleep(delay)
 
     return collected
 
@@ -260,8 +298,18 @@ def parse_args(argv=None):
     parser.add_argument(
         "--pages",
         type=int,
-        default=20,
-        help="Max number of category pages to walk when using --all (default: 20).",
+        default=DEFAULT_MAX_PAGES,
+        help=(
+            "Safety cap on how many category pages to walk (default: "
+            f"{DEFAULT_MAX_PAGES}). Walking normally stops on its own when the "
+            "listing runs out; raise this only if there are more pages than the cap."
+        ),
+    )
+    parser.add_argument(
+        "--delay",
+        type=float,
+        default=REQUEST_DELAY,
+        help=f"Seconds to wait between page requests (default: {REQUEST_DELAY}).",
     )
     return parser.parse_args(argv)
 
@@ -270,14 +318,20 @@ def main(argv=None):
     args = parse_args(argv)
 
     if args.all:
-        # Overview mode: pull everything and print it grouped by date.
-        articles = fetch_articles(all_pages=True, max_pages=args.pages)
+        # Overview mode: walk every page and print everything grouped by date.
+        articles = fetch_articles(
+            max_pages=args.pages, delay=args.delay, verbose=True
+        )
         print_date_wise(articles)
         return
 
     # Default incremental mode: only report (and log) articles not seen before.
+    # We still walk across pages (not just page 1), stopping once we reach a page
+    # we've already fully seen -- so a run catches *every* new article, not 10.
     seen = load_seen()
-    articles = fetch_articles()
+    articles = fetch_articles(
+        max_pages=args.pages, stop_when_seen=seen, delay=args.delay
+    )
 
     new_articles = [a for a in articles if a["url"] not in seen]
 
