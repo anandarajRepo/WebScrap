@@ -106,6 +106,14 @@ _STOCK_LINK_RE = re.compile(
     re.I,
 )
 
+# Articles often introduce the company once, right at the top, as a bold link to
+# its TradeBrains portal page -- e.g.
+#   <strong><a href="https://portal.tradebrains.in/SUZLON?...">Suzlon Energy Ltd</a></strong>
+# Here the portal URL is just the ticker (no /stock/ path), so _STOCK_LINK_RE
+# misses it; this matches any portal.tradebrains.in link, and we only trust it
+# when it is wrapped in <strong>/<b> (the company's first mention).
+_PORTAL_LINK_RE = re.compile(r"portal\.tradebrains\.in/", re.I)
+
 
 def load_seen():
     if os.path.exists(SEEN_FILE):
@@ -226,17 +234,30 @@ def _company_from_title(title):
 def _extract_stock_from_page(soup):
     """Pull a company name out of a fetched article page, or None.
 
-    Tries an in-article link to a TradeBrains stock page first (its anchor text
-    is usually the company name), then falls back to the post's tag links.
+    Tries a bold link to the company's TradeBrains portal page first (the way
+    articles introduce the stock at the top), then any in-article link to a
+    TradeBrains stock page, then falls back to the post's tag links. In every
+    case the anchor text is the company name.
     """
-    # 1) A link to a stock/analysis page; its anchor text names the company.
+    # 1) A bold link to the company's portal page -- the first mention, e.g.
+    #    <strong><a href="https://portal.tradebrains.in/SUZLON?...">Suzlon Energy Ltd</a></strong>
+    for a in soup.find_all("a", href=True):
+        if not _PORTAL_LINK_RE.search(a["href"]):
+            continue
+        if a.find_parent(("strong", "b")) is None:
+            continue
+        name = a.get_text(" ", strip=True)
+        if name and len(name) > 2 and not _GENERIC_SUBJECT.fullmatch(name):
+            return name
+
+    # 2) A link to a stock/analysis page; its anchor text names the company.
     for a in soup.find_all("a", href=True):
         if _STOCK_LINK_RE.search(a["href"]):
             name = a.get_text(" ", strip=True)
             if name and len(name) > 2 and not _GENERIC_SUBJECT.fullmatch(name):
                 return name
 
-    # 2) WordPress post tags (rel="tag") often include the company name.
+    # 3) WordPress post tags (rel="tag") often include the company name.
     for a in soup.find_all("a", rel=True):
         rel = [r.lower() for r in (a.get("rel") or [])]
         if "tag" in rel:
