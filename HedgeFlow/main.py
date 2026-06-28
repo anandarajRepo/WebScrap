@@ -146,6 +146,18 @@ ACTIVITY_HEADER_TIERS = (
 ACTIVITY_HEADER_RE = re.compile(
     r"activity|change|action|recent|trade|buy\s*/\s*sell", re.I
 )
+# Body-content signal: the activity column's *cells* read as 13F verbs
+# ("Buy", "Add 12%", "Reduce 8%", "Sell", ...). We use this to find the column
+# directly from the data, because the header position and the body position can
+# disagree: a leading control/checkbox cell or DataTables' Responsive plugin
+# (which collapses columns at narrow viewports) shifts the body <td>s out of
+# step with the <thead>, so the cell at "header index 8" is some other column.
+# That is exactly what the 0-NEW-buys debug run showed -- header idx 8 said
+# 'Latest Activity' but the body cell there was a sparkline (empty text,
+# data-val='[21.11,55.33,...]'), so the verb test never matched.
+ACTIVITY_VERB_RE = re.compile(
+    r"^\s*(?:buy|sell|sold|add|reduce|trim|new|hold|no\s+change)\b", re.I
+)
 # Header keywords for the stock name / ticker columns, so we can report what was
 # bought rather than just "a new position".
 STOCK_HEADER_RE = re.compile(r"stock|company|security|holding|name", re.I)
@@ -205,7 +217,13 @@ class Renderer:
         if exe:
             launch_kwargs["executable_path"] = exe
         self._browser = self._pw.chromium.launch(**launch_kwargs)
-        context = self._browser.new_context(user_agent=USER_AGENT)
+        # A wide viewport keeps DataTables' Responsive plugin from collapsing
+        # columns into child rows; that collapse drops body <td>s and shifts the
+        # remaining cells out of step with the <thead>, which is one way the
+        # activity column ends up misread.
+        context = self._browser.new_context(
+            user_agent=USER_AGENT, viewport={"width": 1920, "height": 1080}
+        )
         self._page = context.new_page()
         self._page.set_default_timeout(SELECTOR_TIMEOUT_MS)
         self._page.set_default_navigation_timeout(NAV_TIMEOUT_MS)
@@ -485,6 +503,78 @@ def _activity_header_index(headers):
     return None
 
 
+def _activity_index_by_content(rows):
+    """Return the body column index whose cells read like 13F activity verbs.
+
+    `rows` is a list of cell-lists (the table's data rows). We score each column
+    by how many of its cells *start* with an activity verb -- "Buy", "Add 12%",
+    "Reduce 8%", "Sell", "New" -- and return the best-scoring column. This finds
+    the activity column straight from the data, so it is immune to the
+    header/body misalignment that makes a positional ("header index N == body
+    cell N") lookup read the wrong column. Returns None when no column looks like
+    activity (e.g. the verbs are not rendered as text at all), so the caller can
+    fall back to the header-based index.
+    """
+    if not rows:
+        return None
+    width = max(len(r) for r in rows)
+    best_idx, best_score = None, 0
+    for idx in range(width):
+        score = sum(
+            1
+            for cells in rows
+            if idx < len(cells)
+            and ACTIVITY_VERB_RE.match(_clean(cells[idx].get_text(" ")))
+        )
+        if score > best_score:
+            best_idx, best_score = idx, score
+    # Require the column to read as verbs in a meaningful share of rows so a
+    # stray "Add"/"New" inside a company name can't win a 1-vote contest.
+    if best_idx is not None and best_score >= max(1, len(rows) // 5):
+        return best_idx
+    return None
+
+
+def _history_array(data_val):
+    """Parse a sparkline `data-val` like '[0,0,0,0,12.3]' into a list of floats.
+
+    hedgefollow renders several history columns (ownership / activity) as
+    DataTables sparklines whose sort value is a JSON-ish numeric array. Returns
+    [] when the value isn't such an array.
+    """
+    if not data_val:
+        return []
+    s = data_val.strip()
+    if not (s.startswith("[") and s.endswith("]")):
+        return []
+    nums = []
+    for part in s[1:-1].split(","):
+        part = part.strip()
+        if part in ("", "null", "None"):
+            nums.append(0.0)
+            continue
+        try:
+            nums.append(float(part))
+        except ValueError:
+            return []
+    return nums
+
+
+def _history_is_new(data_val):
+    """True if a sparkline array shows a position that appeared only this period.
+
+    A brand-new buy held nothing in every prior quarter and a non-zero amount in
+    the latest one -- i.e. leading zeros followed by a final non-zero value. This
+    catches new positions even when the activity column is a sparkline rather
+    than a "Buy" verb. Price-history arrays never have leading zeros, so this
+    can't misfire on them.
+    """
+    nums = _history_array(data_val)
+    if len(nums) < 2:
+        return False
+    return nums[-1] != 0 and all(n == 0 for n in nums[:-1])
+
+
 def _find_holdings_table(soup):
     """Pick the table on a fund page that holds positions + a recent-activity column.
 
@@ -497,13 +587,25 @@ def _find_holdings_table(soup):
         headers = _table_headers(table)
         if not headers:
             continue
-        activity_idx = _activity_header_index(headers)
-        if activity_idx is None:
+        header_idx = _activity_header_index(headers)
+        if header_idx is None:
             # Without an activity/change column we cannot tell new buys apart.
             continue
+        # Locate the activity column from the body content first (robust to a
+        # header/body column shift), falling back to the header position.
+        rows = list(_row_cells(table))
+        content_idx = _activity_index_by_content(rows)
+        activity_idx = content_idx if content_idx is not None else header_idx
+        # When the body is uniformly shifted from the <thead> (a leading control
+        # cell, responsive collapse), the verb column moves by `delta`; the stock
+        # and ticker columns move by the same amount, so shift their header-based
+        # indices too instead of reading the wrong (shifted) cell.
+        delta = activity_idx - header_idx if content_idx is not None else 0
+        stock_idx = _header_index(headers, STOCK_HEADER_RE)
+        ticker_idx = _header_index(headers, TICKER_HEADER_RE)
         col_map = {
-            "stock": _header_index(headers, STOCK_HEADER_RE),
-            "ticker": _header_index(headers, TICKER_HEADER_RE),
+            "stock": stock_idx + delta if stock_idx is not None else None,
+            "ticker": ticker_idx + delta if ticker_idx is not None else None,
             "activity": activity_idx,
         }
         # Prefer the table with the most data rows (the main holdings table).
@@ -546,9 +648,11 @@ def _is_new_buy(activity_cell, activity_text):
     Detects any of the signals hedgefollow uses:
       * the bare verb "Buy" (the column's marker for opening a new position --
         "Add"/"Reduce"/"Sell" are increases/trims/exits and never qualify);
-      * the literal word "new" in the cell's text; or
+      * the literal word "new" in the cell's text;
       * the structural marker (class="highlighted_bg" with data-val "null"/"0")
-        that flags a position with no prior-quarter value -- i.e. a brand-new buy.
+        that flags a position with no prior-quarter value; or
+      * a sparkline history (data-val='[0,0,0,0,N]') whose value is non-zero only
+        in the latest period -- a position the fund did not hold before now.
     """
     if activity_text and (
         BUY_NEW_RE.match(activity_text) or NEW_BUY_RE.search(activity_text)
@@ -557,8 +661,11 @@ def _is_new_buy(activity_cell, activity_text):
     if activity_cell is None:
         return False
     classes = activity_cell.get("class") or []
-    data_val = (activity_cell.get("data-val") or "").strip().lower()
-    return NEW_BUY_CLASS in classes and data_val in NEW_BUY_DATA_VALS
+    raw_data_val = activity_cell.get("data-val") or ""
+    data_val = raw_data_val.strip().lower()
+    if NEW_BUY_CLASS in classes and data_val in NEW_BUY_DATA_VALS:
+        return True
+    return _history_is_new(raw_data_val)
 
 
 def extract_new_buys(soup, include_all=False):
@@ -587,10 +694,15 @@ def extract_new_buys(soup, include_all=False):
             continue
         stock = _cell_text(cells, col_map["stock"])
         ticker = _cell_text(cells, col_map["ticker"])
-        # If we never resolved a stock-name column, fall back to the first cell,
-        # which on these tables is the company/stock.
-        if not stock and cells:
-            stock = _clean(cells[0].get_text(" "))
+        # If we never resolved a stock-name column, fall back to the first cell
+        # that carries real text -- skipping empty/control cells (a leading "+"
+        # toggle from a shifted body) rather than blindly taking cells[0].
+        if not stock:
+            for cell in cells:
+                text = _clean(cell.get_text(" "))
+                if len(text) > 1 and re.search(r"[A-Za-z]", text):
+                    stock = text
+                    break
         results.append({"stock": stock, "ticker": ticker, "activity": activity})
     return results
 
@@ -599,9 +711,11 @@ def debug_dump_fund_page(html_pages, fund_name):
     """Print what the parser actually sees on a fund page, for diagnosing 0-result runs.
 
     For each rendered table it lists the header cells, which column was chosen as
-    the activity column, and the first few data rows' activity-cell text, CSS
-    classes and data-val. This reveals the real markup (which differs between
-    environments) so the NEW-buy matcher can be aimed correctly.
+    the activity column (header-based vs the body-content detector, so a
+    header/body misalignment is obvious), and the first few data rows' chosen
+    activity cell plus a per-column text/data-val breakdown of the first row.
+    This reveals the real markup (which differs between environments) so the
+    NEW-buy matcher can be aimed correctly.
     """
     print(f"\n----- DEBUG: {fund_name} -----", file=sys.stderr)
     if not html_pages:
@@ -613,24 +727,41 @@ def debug_dump_fund_page(html_pages, fund_name):
     for t_i, table in enumerate(tables):
         headers = _table_headers(table)
         header_text = [_clean(h.get_text()) for h in headers]
-        activity_idx = _activity_header_index(headers)
+        header_idx = _activity_header_index(headers)
         rows = list(_row_cells(table))
         print(
             f"  [table {t_i}] {len(rows)} data row(s); headers={header_text}",
             file=sys.stderr,
         )
-        if activity_idx is None:
+        if header_idx is None:
             print("    no activity/change column detected", file=sys.stderr)
             continue
+        content_idx = _activity_index_by_content(rows)
+        activity_idx = content_idx if content_idx is not None else header_idx
         chosen = header_text[activity_idx] if activity_idx < len(header_text) else "?"
-        print(f"    activity column -> idx {activity_idx} ({chosen!r})", file=sys.stderr)
+        print(
+            f"    activity column -> idx {activity_idx} ({chosen!r}); "
+            f"header-based idx={header_idx}, content-based idx={content_idx}",
+            file=sys.stderr,
+        )
+        # Per-column breakdown of the first data row: the surest way to see where
+        # the verb column actually lives when header and body disagree.
+        if rows:
+            print("    first row, cell-by-cell:", file=sys.stderr)
+            for c_i, cell in enumerate(rows[0]):
+                txt = _clean(cell.get_text(" "))
+                print(
+                    f"      [{c_i}] text={txt!r} data-val={cell.get('data-val')!r}",
+                    file=sys.stderr,
+                )
         for cells in rows[:8]:
             cell = _cell_at(cells, activity_idx)
             if cell is None:
                 continue
             print(
                 f"      activity={_clean(cell.get_text(' '))!r} "
-                f"class={cell.get('class')} data-val={cell.get('data-val')!r}",
+                f"class={cell.get('class')} data-val={cell.get('data-val')!r} "
+                f"-> new={_is_new_buy(cell, _clean(cell.get_text(' ')))}",
                 file=sys.stderr,
             )
     print("----- END DEBUG -----\n", file=sys.stderr)
