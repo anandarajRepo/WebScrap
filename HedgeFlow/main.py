@@ -121,16 +121,27 @@ NEW_BUY_DATA_VALS = {"null", "0"}
 
 # Header keywords that identify the "recent activity" column of a holdings
 # table, so we know which cell to test for a NEW marker. hedgefollow's holdings
-# table actually has TWO columns that loosely mean "change":
-#   * a verb column literally headed "Recent Activity" whose cells read "Buy",
-#     "Add 12%", "Reduce 8%", "Sell" -- this is the one we want; and
-#   * a numeric "% Change" column whose cell for a brand-new position is blank
-#     or 0 (there is no prior quarter to compare against).
-# If we match "change" first we lock onto the numeric column, every new buy's
-# cell looks empty, and we report zero new buys. So we look for the strong,
-# verb-style signal first and only fall back to the weak "change" signal.
-ACTIVITY_STRONG_HEADER_RE = re.compile(r"activity|action|recent|trade|buy\s*/\s*sell", re.I)
-ACTIVITY_WEAK_HEADER_RE = re.compile(r"change", re.I)
+# table has SEVERAL columns that loosely sound like "change/activity", and they
+# sit next to each other, e.g.:
+#   ... 'Δ % of Portf' ... 'Trade Value' ... 'Latest Activity' ...
+#   * 'Latest Activity' is the verb column whose cells read "Buy", "Add 12%",
+#     "Reduce 8%", "Sell" -- this is the ONLY one that tells a new buy apart, and
+#     the one we want.
+#   * 'Trade Value' is a dollar amount (the size of the quarter's trade), not a
+#     verb; matching it makes every new-buy test look at a "$1.2M"-style cell.
+#   * 'Δ % of Portf' is a numeric change; a brand-new position's cell there is
+#     just its current weight, with nothing to distinguish it from a big add.
+# Because the headers appear left-to-right as Trade Value (idx 7) *before* Latest
+# Activity (idx 8), a single regex that matches "trade" returns the wrong column
+# (first match wins). So we rank candidate headers in tiers and take the first
+# tier that matches: the verb "activity/action" column first, other verb-ish
+# wording next (but never the literal "Trade Value"), and the numeric change
+# column only as a last resort.
+ACTIVITY_HEADER_TIERS = (
+    re.compile(r"\bactivity\b|\baction\b", re.I),                  # "Latest Activity"
+    re.compile(r"buy\s*/\s*sell|recent|trade(?!\s*value)", re.I),  # verb-ish, not "Trade Value"
+    re.compile(r"change|Δ|delta", re.I),                      # numeric change, last resort
+)
 # Kept for backwards compatibility / callers that want a single combined test.
 ACTIVITY_HEADER_RE = re.compile(
     r"activity|change|action|recent|trade|buy\s*/\s*sell", re.I
@@ -210,12 +221,18 @@ class Renderer:
             except Exception:
                 pass
 
-    def __call__(self, url, wait_selector=None):
+    def __call__(self, url, wait_selector=None, wait_for_holdings=False):
         """Render `url` and return a list of rendered-HTML strings (one per page).
 
         Returns a list because DataTables paginates: after maximising the page
         length we still click through any remaining "Next" pages so every row is
         captured. On any navigation error we return [] and log to stderr.
+
+        When `wait_for_holdings` is set we additionally wait for the holdings /
+        recent-trades table to actually have body rows (see _wait_for_holdings):
+        on a fund page the static summary table is present immediately while the
+        holdings rows arrive later via DataTables AJAX, so a generic table wait
+        returns too early and we'd capture an empty holdings table.
         """
         page = self._page
         try:
@@ -231,11 +248,63 @@ class Renderer:
                 # Table may still be settling; carry on and parse what we have.
                 pass
 
+        if wait_for_holdings:
+            self._wait_for_holdings(page)
+
         self._maximise_page_length(page)
 
         htmls = [page.content()]
         htmls.extend(self._collect_next_pages(page))
         return htmls
+
+    @staticmethod
+    def _wait_for_holdings(page):
+        """Wait until a holdings-style table (stock + activity columns) has rows.
+
+        hedgefollow populates the holdings / recent-trades tables with DataTables
+        AJAX *after* the page's static tables (the fund-summary table, the
+        filing-error notes) are already in the DOM. So "wait for any tbody tr"
+        is satisfied immediately by the summary table and we snapshot the page
+        while the holdings table is still an empty shell -- which is exactly why
+        a run reports `0 data row(s)` for the holdings table and 0 NEW buys.
+
+        We identify the holdings table by its headers (a stock/company column
+        plus an activity/change column) and poll until that specific table has at
+        least one body row, nudging any lazy rendering by scrolling. Best-effort:
+        on timeout we carry on and parse whatever is present.
+        """
+        # A brand-new position is flagged in the verb column ("Latest Activity"),
+        # so wait for the table that has both a stock column and such a column.
+        predicate = r"""
+          () => {
+            const norm = s => (s || '').toLowerCase();
+            const STOCK = /stock|company|security|holding/;
+            const ACTIVITY = /activity|action|change|trade|recent|buy\s*\/\s*sell|Δ/;
+            for (const table of document.querySelectorAll('table')) {
+              const heads = [...table.querySelectorAll('thead th, thead td')]
+                .map(h => norm(h.textContent));
+              const hasStock = heads.some(h => STOCK.test(h));
+              const hasActivity = heads.some(h => ACTIVITY.test(h));
+              if (!hasStock || !hasActivity) continue;
+              const body = table.querySelector('tbody') || table;
+              if (body.querySelectorAll('tr').length > 0) return true;
+            }
+            return false;
+          }
+        """
+        # Scroll through the page first: some DataTables setups defer drawing
+        # rows until the table scrolls into view.
+        try:
+            page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+            page.wait_for_timeout(300)
+            page.evaluate("window.scrollTo(0, 0)")
+        except Exception:
+            pass
+        try:
+            page.wait_for_function(predicate, timeout=SELECTOR_TIMEOUT_MS)
+        except Exception:
+            # Rows never showed up within the timeout; parse what we have.
+            pass
 
     @staticmethod
     def _maximise_page_length(page):
@@ -402,15 +471,18 @@ def _table_headers(table):
 def _activity_header_index(headers):
     """Index of the column to test for a NEW marker on a holdings table.
 
-    Prefers the verb-style "Recent Activity" column ("Buy"/"Add"/"Reduce"/"Sell")
-    over the numeric "% Change" column, since a brand-new position has no value in
-    the numeric column. Falls back to the weak "change" signal only if no strong
-    column exists. Returns None when neither is present.
+    Prefers the verb-style "Latest Activity" column ("Buy"/"Add"/"Reduce"/"Sell")
+    over the dollar "Trade Value" column and the numeric "Δ % of Portf" column,
+    since only the verb column distinguishes a brand-new position. Walks the
+    header tiers in priority order and returns the first column any tier matches;
+    a later tier is consulted only when no earlier tier matched any header.
+    Returns None when no tier matches.
     """
-    strong = _header_index(headers, ACTIVITY_STRONG_HEADER_RE)
-    if strong is not None:
-        return strong
-    return _header_index(headers, ACTIVITY_WEAK_HEADER_RE)
+    for pattern in ACTIVITY_HEADER_TIERS:
+        idx = _header_index(headers, pattern)
+        if idx is not None:
+            return idx
+    return None
 
 
 def _find_holdings_table(soup):
@@ -598,9 +670,10 @@ def scrape(render, limit=None, delay=REQUEST_DELAY, include_all=False, debug=Fal
         print(f"[{i}/{len(funds)}] {fund['name']} -> {fund['url']}")
         if delay:
             time.sleep(delay)
-        # Wait for actual data rows, not just an empty DataTables shell -- the
-        # holdings table element appears immediately while its rows arrive later.
-        fund_pages = render(fund["url"], "table tbody tr td")
+        # Wait for the holdings table's own rows, not just any tbody row -- the
+        # static summary table is present immediately while the holdings rows
+        # arrive later via DataTables AJAX (see Renderer._wait_for_holdings).
+        fund_pages = render(fund["url"], "table", wait_for_holdings=True)
         if debug:
             debug_dump_fund_page(fund_pages, fund["name"])
         buys = (
