@@ -1,8 +1,14 @@
 """
 tradebrains_orders_scraper.py
 
-Pulls article titles + links + publish dates from:
+Pulls article titles + links + publish dates + the stock (company) each article
+is about from:
 https://tradebrains.in/category/indian-markets/orders/
+
+The stock name is taken from the headline when possible (these headlines lead
+with the company, e.g. "Texmaco Rail bags ..."). When a headline hides it behind
+a sector word ("Defence stock jumps ..."), the article page is fetched to find
+the company; pass --no-stock-fetch to skip that and rely on the headline only.
 
 Designed to be run once a day (via cron / Task Scheduler / launchd).
 It keeps a small "seen URLs" file so each run only reports NEW articles
@@ -71,6 +77,34 @@ _DATE_FORMATS = (
 )
 
 UNKNOWN_DATE = "Unknown date"
+UNKNOWN_STOCK = "Unknown stock"
+
+# In these headlines the company name comes first, then an action verb
+# ("Texmaco Rail bags ...", "Prostarm Info Systems emerges ..."). We slice the
+# title at the first such verb to recover the name without any extra requests.
+_HEADLINE_ACTIONS = re.compile(
+    r"\b(bags?|secures?|wins?|receives?|received|emerges?|gets?|got|lands?|"
+    r"jumps?|surges?|rises?|rose|soars?|rallies|rally|gains?|hits?|signs?|inks?|"
+    r"to\s+supply|to\s+set\s+up|to\s+build|posts?|reports?|announces?|approves?|"
+    r"declares?|fixes?|completes?|raises?)\b",
+    re.I,
+)
+
+# When the leading chunk is just a sector/placeholder rather than a real name,
+# the company is hidden in the body (e.g. "Defence stock jumps ..."), so we
+# treat it as "no name in the title" and let the caller look inside the article.
+_GENERIC_SUBJECT = re.compile(
+    r"\b(stock|stocks|share|shares|scrip|company|companies|firm|player|giant|"
+    r"maker|psu|multibagger|smallcap|midcap|largecap)\b",
+    re.I,
+)
+
+# A link inside an article pointing at a TradeBrains stock/analysis page is a
+# strong signal for the company the piece is about.
+_STOCK_LINK_RE = re.compile(
+    r"(?:portal\.)?tradebrains\.in/(?:portal/)?(?:stock|share-price|company)/",
+    re.I,
+)
 
 
 def load_seen():
@@ -168,6 +202,82 @@ def _parse_articles(soup):
         articles.append(
             {"title": title, "url": link, "date": _extract_date(h2) or UNKNOWN_DATE}
         )
+    return articles
+
+
+def _company_from_title(title):
+    """Best-effort company name from a headline, or None if the title hides it.
+
+    These headlines put the company first, then an action verb
+    ("Texmaco Rail bags ...", "Prostarm Info Systems emerges ..."), so the words
+    before the first such verb are the company. Some headlines instead lead with
+    a sector placeholder ("Defence stock jumps ...") -- there is no real name to
+    take, so we return None and let the caller look inside the article.
+    """
+    if not title:
+        return None
+    head = _HEADLINE_ACTIONS.split(title, maxsplit=1)[0]
+    head = head.strip(" -–—:|")
+    if not head or _GENERIC_SUBJECT.search(head):
+        return None
+    return head
+
+
+def _extract_stock_from_page(soup):
+    """Pull a company name out of a fetched article page, or None.
+
+    Tries an in-article link to a TradeBrains stock page first (its anchor text
+    is usually the company name), then falls back to the post's tag links.
+    """
+    # 1) A link to a stock/analysis page; its anchor text names the company.
+    for a in soup.find_all("a", href=True):
+        if _STOCK_LINK_RE.search(a["href"]):
+            name = a.get_text(" ", strip=True)
+            if name and len(name) > 2 and not _GENERIC_SUBJECT.fullmatch(name):
+                return name
+
+    # 2) WordPress post tags (rel="tag") often include the company name.
+    for a in soup.find_all("a", rel=True):
+        rel = [r.lower() for r in (a.get("rel") or [])]
+        if "tag" in rel:
+            name = a.get_text(" ", strip=True)
+            if name and len(name) > 2 and not _GENERIC_SUBJECT.search(name):
+                return name
+
+    return None
+
+
+def fetch_stock_name(url, delay=REQUEST_DELAY, verbose=False):
+    """Fetch one article and return the company name mentioned, or None.
+
+    Network/parse errors are swallowed (returning None) so resolving a stock
+    name can never break the main scrape.
+    """
+    try:
+        resp = requests.get(url, headers=HEADERS, timeout=20)
+        resp.raise_for_status()
+    except requests.RequestException as exc:
+        if verbose:
+            print(f"  (could not fetch {url} for stock name: {exc})")
+        return None
+    soup = BeautifulSoup(resp.text, "html.parser")
+    return _extract_stock_from_page(soup)
+
+
+def enrich_stock_names(articles, fetch=True, delay=REQUEST_DELAY, verbose=False):
+    """Fill in each article's 'stock' field (the company the article is about).
+
+    Tries the headline first (cheap, no request). For articles whose headline
+    hides the company behind a sector word, optionally fetches the article to
+    find it. Falls back to UNKNOWN_STOCK when nothing usable is found.
+    """
+    for art in articles:
+        name = _company_from_title(art["title"])
+        if name is None and fetch:
+            name = fetch_stock_name(art["url"], delay=delay, verbose=verbose)
+            if delay:
+                time.sleep(delay)
+        art["stock"] = name or UNKNOWN_STOCK
     return articles
 
 
@@ -269,7 +379,7 @@ def print_date_wise(articles):
         print(f"=== {date_str} ({len(items)}) ===")
         for art in items:
             print(f"  - {art['title']}")
-            print(f"    {art['url']}")
+            print(f"    {art['url']}  [Stock: {art.get('stock', UNKNOWN_STOCK)}]")
         print()
 
 
@@ -278,11 +388,19 @@ def append_to_csv(new_articles):
     with open(LOG_FILE, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         if not file_exists:
-            writer.writerow(["scraped_at_utc", "published_date", "title", "url"])
+            writer.writerow(
+                ["scraped_at_utc", "published_date", "stock", "title", "url"]
+            )
         scraped_at = datetime.now(timezone.utc).isoformat()
         for art in new_articles:
             writer.writerow(
-                [scraped_at, art.get("date", UNKNOWN_DATE), art["title"], art["url"]]
+                [
+                    scraped_at,
+                    art.get("date", UNKNOWN_DATE),
+                    art.get("stock", UNKNOWN_STOCK),
+                    art["title"],
+                    art["url"],
+                ]
             )
 
 
@@ -311,6 +429,15 @@ def parse_args(argv=None):
         default=REQUEST_DELAY,
         help=f"Seconds to wait between page requests (default: {REQUEST_DELAY}).",
     )
+    parser.add_argument(
+        "--no-stock-fetch",
+        action="store_true",
+        help=(
+            "Don't open individual articles to resolve stock names hidden behind "
+            "generic headlines (e.g. 'Defence stock jumps ...'); rely on the "
+            "headline alone. Faster, but such articles show 'Unknown stock'."
+        ),
+    )
     return parser.parse_args(argv)
 
 
@@ -321,6 +448,9 @@ def main(argv=None):
         # Overview mode: walk every page and print everything grouped by date.
         articles = fetch_articles(
             max_pages=args.pages, delay=args.delay, verbose=True
+        )
+        enrich_stock_names(
+            articles, fetch=not args.no_stock_fetch, delay=args.delay, verbose=True
         )
         print_date_wise(articles)
         return
@@ -336,6 +466,9 @@ def main(argv=None):
     new_articles = [a for a in articles if a["url"] not in seen]
 
     if new_articles:
+        enrich_stock_names(
+            new_articles, fetch=not args.no_stock_fetch, delay=args.delay
+        )
         print(f"Found {len(new_articles)} new article(s):\n")
         print_date_wise(new_articles)
         append_to_csv(new_articles)
