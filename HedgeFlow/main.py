@@ -100,6 +100,17 @@ FUND_LINK_RE = re.compile(r"/funds?/[^/?#]+", re.I)
 # That is what distinguishes a new buy from merely adding to an existing one.
 NEW_BUY_RE = re.compile(r"\bnew\b", re.I)
 
+# hedgefollow also flags a brand-new position *structurally*, not just with text:
+# the recent-activity cell renders as e.g.
+#     <td class="highlighted_bg" data-val="null" ...>
+# There is no prior-quarter value to compute a % change from, so DataTables'
+# sort value (data-val) is "null" (or "0") and the cell is highlighted. The
+# visible "New" marker is supplied by CSS/markup that get_text() doesn't see, so
+# a text-only check misses every new buy. We therefore also treat this
+# class+data-val combination as a NEW marker.
+NEW_BUY_CLASS = "highlighted_bg"
+NEW_BUY_DATA_VALS = {"null", "0"}
+
 # Header keywords that identify the "recent activity" / change column of a
 # holdings table, so we know which cell to test for a NEW marker.
 ACTIVITY_HEADER_RE = re.compile(r"activity|change|action|recent|trade|buy/sell", re.I)
@@ -410,10 +421,32 @@ def _row_cells(table):
             yield cells
 
 
-def _cell_text(cells, idx):
+def _cell_at(cells, idx):
+    """Return the cell element at `idx`, or None if the index is missing/out of range."""
     if idx is None or idx >= len(cells):
-        return ""
-    return _clean(cells[idx].get_text(" "))
+        return None
+    return cells[idx]
+
+
+def _cell_text(cells, idx):
+    cell = _cell_at(cells, idx)
+    return _clean(cell.get_text(" ")) if cell is not None else ""
+
+
+def _is_new_buy(activity_cell, activity_text):
+    """True if the recent-activity cell marks a brand-new position.
+
+    Detects either signal hedgefollow uses: the word "new" in the cell's text,
+    or the structural marker (class="highlighted_bg" with data-val "null"/"0")
+    that flags a position with no prior-quarter value -- i.e. a brand-new buy.
+    """
+    if activity_text and NEW_BUY_RE.search(activity_text):
+        return True
+    if activity_cell is None:
+        return False
+    classes = activity_cell.get("class") or []
+    data_val = (activity_cell.get("data-val") or "").strip().lower()
+    return NEW_BUY_CLASS in classes and data_val in NEW_BUY_DATA_VALS
 
 
 def extract_new_buys(soup, include_all=False):
@@ -428,10 +461,17 @@ def extract_new_buys(soup, include_all=False):
 
     results = []
     for cells in _row_cells(table):
-        activity = _cell_text(cells, col_map["activity"])
+        activity_cell = _cell_at(cells, col_map["activity"])
+        activity = _clean(activity_cell.get_text(" ")) if activity_cell is not None else ""
+        is_new = _is_new_buy(activity_cell, activity)
+        # A cell can be flagged NEW structurally (highlighted_bg / data-val
+        # null|0) while rendering no text get_text() can see; surface it as
+        # "New" so the row isn't dropped by the empty-activity guard below.
+        if not activity and is_new:
+            activity = "New"
         if not activity:
             continue
-        if not include_all and not NEW_BUY_RE.search(activity):
+        if not include_all and not is_new:
             continue
         stock = _cell_text(cells, col_map["stock"])
         ticker = _cell_text(cells, col_map["ticker"])
