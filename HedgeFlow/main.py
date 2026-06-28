@@ -49,6 +49,7 @@ Usage:
     python3 main.py --delay 0.5           # pause between fund pages (default 1.0s)
     python3 main.py --include-all-activity # don't filter -- show every recent trade
     python3 main.py --headful             # show the browser window (debugging)
+    python3 main.py --limit 3 --debug     # dump each table's headers + activity cells
 """
 
 import argparse
@@ -118,9 +119,22 @@ BUY_NEW_RE = re.compile(r"^\s*(?:new\s+)?buy(?:\s+new)?\s*$", re.I)
 NEW_BUY_CLASS = "highlighted_bg"
 NEW_BUY_DATA_VALS = {"null", "0"}
 
-# Header keywords that identify the "recent activity" / change column of a
-# holdings table, so we know which cell to test for a NEW marker.
-ACTIVITY_HEADER_RE = re.compile(r"activity|change|action|recent|trade|buy/sell", re.I)
+# Header keywords that identify the "recent activity" column of a holdings
+# table, so we know which cell to test for a NEW marker. hedgefollow's holdings
+# table actually has TWO columns that loosely mean "change":
+#   * a verb column literally headed "Recent Activity" whose cells read "Buy",
+#     "Add 12%", "Reduce 8%", "Sell" -- this is the one we want; and
+#   * a numeric "% Change" column whose cell for a brand-new position is blank
+#     or 0 (there is no prior quarter to compare against).
+# If we match "change" first we lock onto the numeric column, every new buy's
+# cell looks empty, and we report zero new buys. So we look for the strong,
+# verb-style signal first and only fall back to the weak "change" signal.
+ACTIVITY_STRONG_HEADER_RE = re.compile(r"activity|action|recent|trade|buy\s*/\s*sell", re.I)
+ACTIVITY_WEAK_HEADER_RE = re.compile(r"change", re.I)
+# Kept for backwards compatibility / callers that want a single combined test.
+ACTIVITY_HEADER_RE = re.compile(
+    r"activity|change|action|recent|trade|buy\s*/\s*sell", re.I
+)
 # Header keywords for the stock name / ticker columns, so we can report what was
 # bought rather than just "a new position".
 STOCK_HEADER_RE = re.compile(r"stock|company|security|holding|name", re.I)
@@ -385,6 +399,20 @@ def _table_headers(table):
     return header_row.find_all(["th", "td"])
 
 
+def _activity_header_index(headers):
+    """Index of the column to test for a NEW marker on a holdings table.
+
+    Prefers the verb-style "Recent Activity" column ("Buy"/"Add"/"Reduce"/"Sell")
+    over the numeric "% Change" column, since a brand-new position has no value in
+    the numeric column. Falls back to the weak "change" signal only if no strong
+    column exists. Returns None when neither is present.
+    """
+    strong = _header_index(headers, ACTIVITY_STRONG_HEADER_RE)
+    if strong is not None:
+        return strong
+    return _header_index(headers, ACTIVITY_WEAK_HEADER_RE)
+
+
 def _find_holdings_table(soup):
     """Pick the table on a fund page that holds positions + a recent-activity column.
 
@@ -397,7 +425,7 @@ def _find_holdings_table(soup):
         headers = _table_headers(table)
         if not headers:
             continue
-        activity_idx = _header_index(headers, ACTIVITY_HEADER_RE)
+        activity_idx = _activity_header_index(headers)
         if activity_idx is None:
             # Without an activity/change column we cannot tell new buys apart.
             continue
@@ -495,6 +523,47 @@ def extract_new_buys(soup, include_all=False):
     return results
 
 
+def debug_dump_fund_page(html_pages, fund_name):
+    """Print what the parser actually sees on a fund page, for diagnosing 0-result runs.
+
+    For each rendered table it lists the header cells, which column was chosen as
+    the activity column, and the first few data rows' activity-cell text, CSS
+    classes and data-val. This reveals the real markup (which differs between
+    environments) so the NEW-buy matcher can be aimed correctly.
+    """
+    print(f"\n----- DEBUG: {fund_name} -----", file=sys.stderr)
+    if not html_pages:
+        print("  (no HTML rendered for this fund)", file=sys.stderr)
+        return
+    soup = BeautifulSoup(html_pages[0], "html.parser")
+    tables = soup.find_all("table")
+    print(f"  rendered tables on page: {len(tables)}", file=sys.stderr)
+    for t_i, table in enumerate(tables):
+        headers = _table_headers(table)
+        header_text = [_clean(h.get_text()) for h in headers]
+        activity_idx = _activity_header_index(headers)
+        rows = list(_row_cells(table))
+        print(
+            f"  [table {t_i}] {len(rows)} data row(s); headers={header_text}",
+            file=sys.stderr,
+        )
+        if activity_idx is None:
+            print("    no activity/change column detected", file=sys.stderr)
+            continue
+        chosen = header_text[activity_idx] if activity_idx < len(header_text) else "?"
+        print(f"    activity column -> idx {activity_idx} ({chosen!r})", file=sys.stderr)
+        for cells in rows[:8]:
+            cell = _cell_at(cells, activity_idx)
+            if cell is None:
+                continue
+            print(
+                f"      activity={_clean(cell.get_text(' '))!r} "
+                f"class={cell.get('class')} data-val={cell.get('data-val')!r}",
+                file=sys.stderr,
+            )
+    print("----- END DEBUG -----\n", file=sys.stderr)
+
+
 def extract_new_buys_multi(html_pages, include_all=False):
     """Merge NEW buys across all rendered pages of a fund, de-duplicated."""
     results, seen = [], set()
@@ -512,7 +581,7 @@ def extract_new_buys_multi(html_pages, include_all=False):
 # --------------------------------------------------------------------------- #
 # Orchestration + output
 # --------------------------------------------------------------------------- #
-def scrape(render, limit=None, delay=REQUEST_DELAY, include_all=False):
+def scrape(render, limit=None, delay=REQUEST_DELAY, include_all=False, debug=False):
     """Return [{name, url, buys: [...]}, ...] for every fund in the table."""
     home_pages = render(BASE_URL, "a[href*='/funds/']")
     if not home_pages:
@@ -529,7 +598,11 @@ def scrape(render, limit=None, delay=REQUEST_DELAY, include_all=False):
         print(f"[{i}/{len(funds)}] {fund['name']} -> {fund['url']}")
         if delay:
             time.sleep(delay)
-        fund_pages = render(fund["url"], "table")
+        # Wait for actual data rows, not just an empty DataTables shell -- the
+        # holdings table element appears immediately while its rows arrive later.
+        fund_pages = render(fund["url"], "table tbody tr td")
+        if debug:
+            debug_dump_fund_page(fund_pages, fund["name"])
         buys = (
             extract_new_buys_multi(fund_pages, include_all=include_all)
             if fund_pages
@@ -666,6 +739,15 @@ def parse_args(argv=None):
         action="store_true",
         help="Show the browser window instead of running headless (debugging).",
     )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help=(
+            "Print, to stderr, every table's headers and a sample of the chosen "
+            "activity column's cells for each fund. Use this to see the real "
+            "markup when a run reports 0 NEW buys."
+        ),
+    )
     return parser.parse_args(argv)
 
 
@@ -677,6 +759,7 @@ def main(argv=None):
             limit=args.limit,
             delay=args.delay,
             include_all=args.include_all_activity,
+            debug=args.debug,
         )
     print_results(results, include_all=args.include_all_activity)
     if not args.include_all_activity:
