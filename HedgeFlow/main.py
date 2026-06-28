@@ -97,8 +97,15 @@ FUND_LINK_RE = re.compile(r"/funds?/[^/?#]+", re.I)
 
 # A holdings/trades row's "recent activity" cell flags a brand-new position with
 # some form of the word "new" (e.g. "New", "New Buy", "Buy New", "Add (New)").
-# That is what distinguishes a new buy from merely adding to an existing one.
 NEW_BUY_RE = re.compile(r"\bnew\b", re.I)
+
+# In practice hedgefollow does NOT print the word "new" in that column. It uses
+# 13F shorthand: a brand-new position reads "Buy", while increasing an existing
+# one reads "Add 12%", trimming reads "Reduce 8%", and closing out reads "Sell".
+# So the distinguishing signal for a new buy is the bare verb "Buy" (with no
+# percentage, since there is no prior-quarter size to compare against). This
+# matches "Buy", "Buy New", "New Buy" but NOT "Add"/"Reduce"/"Sell"/"Buy/Sell".
+BUY_NEW_RE = re.compile(r"^\s*(?:new\s+)?buy(?:\s+new)?\s*$", re.I)
 
 # hedgefollow also flags a brand-new position *structurally*, not just with text:
 # the recent-activity cell renders as e.g.
@@ -436,11 +443,16 @@ def _cell_text(cells, idx):
 def _is_new_buy(activity_cell, activity_text):
     """True if the recent-activity cell marks a brand-new position.
 
-    Detects either signal hedgefollow uses: the word "new" in the cell's text,
-    or the structural marker (class="highlighted_bg" with data-val "null"/"0")
-    that flags a position with no prior-quarter value -- i.e. a brand-new buy.
+    Detects any of the signals hedgefollow uses:
+      * the bare verb "Buy" (the column's marker for opening a new position --
+        "Add"/"Reduce"/"Sell" are increases/trims/exits and never qualify);
+      * the literal word "new" in the cell's text; or
+      * the structural marker (class="highlighted_bg" with data-val "null"/"0")
+        that flags a position with no prior-quarter value -- i.e. a brand-new buy.
     """
-    if activity_text and NEW_BUY_RE.search(activity_text):
+    if activity_text and (
+        BUY_NEW_RE.match(activity_text) or NEW_BUY_RE.search(activity_text)
+    ):
         return True
     if activity_cell is None:
         return False
@@ -541,6 +553,58 @@ def print_results(results, include_all=False):
         print()
 
 
+def aggregate_new_buys(results):
+    """Collapse every fund's NEW buys into one consensus-ranked list.
+
+    Returns [{stock, ticker, funds: [name, ...], count}, ...] where each entry is
+    a distinct stock that at least one fund opened as a brand-new position, with
+    the funds that bought it. Sorted by number of funds (the "situational
+    awareness" signal -- the more funds opening the same name, the stronger the
+    crowd conviction), then alphabetically by stock.
+    """
+    by_stock = {}
+    for fund in results:
+        for b in fund["buys"]:
+            ticker = (b.get("ticker") or "").strip()
+            stock = (b.get("stock") or "").strip()
+            # Group by ticker when we have one (most reliable), else by name.
+            key = ticker.upper() if ticker else stock.lower()
+            if not key:
+                continue
+            entry = by_stock.setdefault(
+                key, {"stock": stock, "ticker": ticker, "funds": []}
+            )
+            if not entry["stock"]:
+                entry["stock"] = stock
+            if not entry["ticker"]:
+                entry["ticker"] = ticker
+            if fund["name"] not in entry["funds"]:
+                entry["funds"].append(fund["name"])
+
+    aggregated = [
+        {**entry, "count": len(entry["funds"])} for entry in by_stock.values()
+    ]
+    aggregated.sort(key=lambda e: (-e["count"], (e["stock"] or e["ticker"]).lower()))
+    return aggregated
+
+
+def print_situational_awareness(results):
+    """Print the cross-fund summary of brand-new buys (consensus first)."""
+    aggregated = aggregate_new_buys(results)
+    total = sum(e["count"] for e in aggregated)
+    print(f"=== Situational Awareness ({total} NEW buy(s)) ===")
+    if not aggregated:
+        print("  (none found)")
+        print()
+        return
+    for e in aggregated:
+        ticker = f" [{e['ticker']}]" if e["ticker"] else ""
+        funds = ", ".join(e["funds"])
+        plural = "fund" if e["count"] == 1 else "funds"
+        print(f"  - {e['stock']}{ticker}  ({e['count']} {plural}: {funds})")
+    print()
+
+
 def write_csv(results, path):
     scraped_at = datetime.now(timezone.utc).isoformat()
     with open(path, "w", newline="", encoding="utf-8") as f:
@@ -615,6 +679,8 @@ def main(argv=None):
             include_all=args.include_all_activity,
         )
     print_results(results, include_all=args.include_all_activity)
+    if not args.include_all_activity:
+        print_situational_awareness(results)
     if args.csv:
         write_csv(results, args.csv)
 
