@@ -607,6 +607,12 @@ def _find_holdings_table(soup):
             "stock": stock_idx + delta if stock_idx is not None else None,
             "ticker": ticker_idx + delta if ticker_idx is not None else None,
             "activity": activity_idx,
+            # Header labels (in thead order) and the body/header shift, so callers
+            # can reconstruct an entire row -- every column, not just the
+            # stock/ticker/activity ones -- by reading body cell `header_idx +
+            # delta` for each header.
+            "headers": [_clean(h.get_text(" ")) for h in headers],
+            "delta": delta,
         }
         # Prefer the table with the most data rows (the main holdings table).
         row_count = len(table.find_all("tr"))
@@ -668,8 +674,39 @@ def _is_new_buy(activity_cell, activity_text):
     return _history_is_new(raw_data_val)
 
 
+def _full_row(cells, col_map):
+    """Return an ordered {header: value} dict for an entire holdings-table row.
+
+    Maps each thead header to its body cell, accounting for the body/header shift
+    (`delta`) that a leading control cell or DataTables' Responsive collapse can
+    introduce. Headers with no text get a positional `col{n}` label, and any body
+    cells beyond the last header (extra/unlabelled columns) are appended as
+    `col{n}` so nothing in the row is dropped.
+    """
+    headers = col_map.get("headers") or []
+    delta = col_map.get("delta") or 0
+    row = {}
+    used = set()
+    for h_idx, head in enumerate(headers):
+        body_idx = h_idx + delta
+        if body_idx < 0:
+            continue
+        used.add(body_idx)
+        label = head or f"col{h_idx}"
+        row[label] = _cell_text(cells, body_idx)
+    for c_idx in range(len(cells)):
+        if c_idx in used:
+            continue
+        row[f"col{c_idx}"] = _cell_text(cells, c_idx)
+    return row
+
+
 def extract_new_buys(soup, include_all=False):
-    """Return [{stock, ticker, activity}, ...] of NEW buys from a fund page.
+    """Return [{stock, ticker, activity, row}, ...] of NEW buys from a fund page.
+
+    Each result carries the parsed stock/ticker/activity fields *and* `row`, an
+    ordered {header: value} dict holding every column of that holdings-table row
+    (not just the activity cell), so the full position detail is preserved.
 
     With include_all=True, returns every row's recent activity instead of just the
     NEW positions (useful for inspecting/verifying the parse against a fund page).
@@ -703,7 +740,14 @@ def extract_new_buys(soup, include_all=False):
                 if len(text) > 1 and re.search(r"[A-Za-z]", text):
                     stock = text
                     break
-        results.append({"stock": stock, "ticker": ticker, "activity": activity})
+        results.append(
+            {
+                "stock": stock,
+                "ticker": ticker,
+                "activity": activity,
+                "row": _full_row(cells, col_map),
+            }
+        )
     return results
 
 
@@ -825,8 +869,17 @@ def print_results(results, include_all=False):
         if not buys:
             print("  (none found)")
         for b in buys:
-            ticker = f" [{b['ticker']}]" if b["ticker"] else ""
-            print(f"  - {b['stock']}{ticker}  ({b['activity']})")
+            row = b.get("row")
+            if row:
+                # Show the entire row: every column the holdings table carries,
+                # not just the activity verb.
+                details = "  |  ".join(
+                    f"{header}: {value}" for header, value in row.items() if value
+                )
+                print(f"  - {details}")
+            else:
+                ticker = f" [{b['ticker']}]" if b["ticker"] else ""
+                print(f"  - {b['stock']}{ticker}  ({b['activity']})")
         print()
 
 
@@ -884,23 +937,44 @@ def print_situational_awareness(results):
 
 def write_csv(results, path):
     scraped_at = datetime.now(timezone.utc).isoformat()
+    # Build the column order from the rows themselves so every holdings-table
+    # column ends up in the CSV. We keep the fund metadata up front, then append
+    # each distinct row header in the order it was first seen.
+    meta_cols = ["scraped_at_utc", "fund", "fund_url"]
+    row_cols = []
+    seen = set()
+    for fund in results:
+        for b in fund["buys"]:
+            for header in (b.get("row") or {}):
+                if header not in seen and header not in meta_cols:
+                    seen.add(header)
+                    row_cols.append(header)
+    # Fall back to the original flat columns when no full-row data is present.
+    if not row_cols:
+        row_cols = ["stock", "ticker", "activity"]
+
     with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(
-            ["scraped_at_utc", "fund", "fund_url", "stock", "ticker", "activity"]
-        )
+        writer = csv.DictWriter(f, fieldnames=meta_cols + row_cols, extrasaction="ignore")
+        writer.writeheader()
         for fund in results:
             for b in fund["buys"]:
-                writer.writerow(
-                    [
-                        scraped_at,
-                        fund["name"],
-                        fund["url"],
-                        b["stock"],
-                        b["ticker"],
-                        b["activity"],
-                    ]
-                )
+                record = {
+                    "scraped_at_utc": scraped_at,
+                    "fund": fund["name"],
+                    "fund_url": fund["url"],
+                }
+                row = b.get("row")
+                if row:
+                    record.update(row)
+                else:
+                    record.update(
+                        {
+                            "stock": b.get("stock", ""),
+                            "ticker": b.get("ticker", ""),
+                            "activity": b.get("activity", ""),
+                        }
+                    )
+                writer.writerow(record)
     print(f"Wrote results to {path}")
 
 
