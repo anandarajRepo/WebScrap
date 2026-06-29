@@ -860,6 +860,45 @@ def scrape(render, limit=None, delay=REQUEST_DELAY, include_all=False, debug=Fal
     return results
 
 
+def render_table(rows, indent="  "):
+    """Render a list of dict rows as an aligned, fixed-width text table.
+
+    Columns are the union of the rows' keys, in the order they're first seen.
+    Each column is padded to its widest cell (header included) so values line up
+    vertically -- far more readable than one long pipe-delimited line per row.
+    Returns the table as a list of lines (no trailing newline).
+    """
+    # Column order: each header the first time it appears, following row order.
+    columns = []
+    seen = set()
+    for row in rows:
+        for header in row:
+            if header not in seen:
+                seen.add(header)
+                columns.append(header)
+    if not columns:
+        return []
+
+    def cell(row, col):
+        value = row.get(col, "")
+        return "" if value is None else str(value)
+
+    # Width of each column = the widest of its header and every cell under it.
+    widths = {c: len(c) for c in columns}
+    for row in rows:
+        for c in columns:
+            widths[c] = max(widths[c], len(cell(row, c)))
+
+    def format_row(values):
+        return indent + " | ".join(v.ljust(widths[c]) for c, v in zip(columns, values))
+
+    lines = [format_row(columns)]
+    lines.append(indent + "-+-".join("-" * widths[c] for c in columns))
+    for row in rows:
+        lines.append(format_row([cell(row, c) for c in columns]))
+    return lines
+
+
 def print_results(results, include_all=False):
     label = "recent trade(s)" if include_all else "NEW buy(s)"
     print()
@@ -868,16 +907,14 @@ def print_results(results, include_all=False):
         print(f"=== {fund['name']} ({len(buys)} {label}) ===")
         if not buys:
             print("  (none found)")
+        # Show the entire row -- every column the holdings table carries -- as an
+        # aligned table so the columns line up instead of running together on one
+        # long line. Buys without full-row data fall back to a compact summary.
+        rows = [b["row"] for b in buys if b.get("row")]
+        for line in render_table(rows):
+            print(line)
         for b in buys:
-            row = b.get("row")
-            if row:
-                # Show the entire row: every column the holdings table carries,
-                # not just the activity verb.
-                details = "  |  ".join(
-                    f"{header}: {value}" for header, value in row.items() if value
-                )
-                print(f"  - {details}")
-            else:
+            if not b.get("row"):
                 ticker = f" [{b['ticker']}]" if b["ticker"] else ""
                 print(f"  - {b['stock']}{ticker}  ({b['activity']})")
         print()
