@@ -38,6 +38,8 @@ HEADERS = {
 }
 DEFAULT_LOOKBACK_DAYS = 7
 REQUEST_TIMEOUT = 30
+MAX_STOCKS = 300  # total number of stocks to fetch
+PAGE_SIZE = 100   # per-request page size when paginating
 
 
 def default_from_datetime():
@@ -46,11 +48,15 @@ def default_from_datetime():
     return dt.replace(microsecond=0).isoformat()
 
 
-def fetch_penny_stocks(from_datetime):
-    """Return the full list of penny-stock ticker records from the API."""
+def _request_page(from_datetime, limit, offset):
+    """Fetch one page of ticker records from the API."""
     resp = requests.get(
         API_URL,
-        params={"from-datetime": from_datetime},
+        params={
+            "from-datetime": from_datetime,
+            "limit": limit,
+            "offset": offset,
+        },
         headers=HEADERS,
         timeout=REQUEST_TIMEOUT,
     )
@@ -66,6 +72,44 @@ def fetch_penny_stocks(from_datetime):
             if isinstance(data.get(key), list):
                 return data[key]
     raise ValueError(f"Unexpected API response shape: {type(data).__name__}")
+
+
+def _record_id(rec):
+    """Stable identity for a record, used to de-duplicate across pages."""
+    for key in ("ticker", "symbol", "stock", "name"):
+        if key in rec:
+            return rec[key]
+    return json.dumps(rec, sort_keys=True)
+
+
+def fetch_penny_stocks(from_datetime, max_stocks=MAX_STOCKS):
+    """Return up to ``max_stocks`` ticker records, paginating as needed.
+
+    The API caps un-paginated responses (e.g. at 15 records), so we ask for an
+    explicit ``limit`` and walk ``offset`` pages until we have ``max_stocks``
+    records, the API runs out, or it starts repeating records (i.e. it
+    ignores pagination parameters).
+    """
+    records = []
+    seen = set()
+    offset = 0
+    while len(records) < max_stocks:
+        limit = min(PAGE_SIZE, max_stocks - len(records))
+        page = _request_page(from_datetime, limit, offset)
+        if not page:
+            break
+        new = [r for r in page if _record_id(r) not in seen]
+        if not new:  # API repeated a page -> it ignores offset; stop
+            break
+        for rec in new:
+            seen.add(_record_id(rec))
+            records.append(rec)
+            if len(records) >= max_stocks:
+                break
+        if len(page) < limit:  # short page -> no more data
+            break
+        offset += len(page)
+    return records
 
 
 EXCLUDED_COLUMNS = {"date", "timestamp", "starting_date", "ending_date"}
@@ -94,7 +138,7 @@ def print_table(keys, rows):
     print("-" * len(header))
     for r in rows:
         print("  ".join(str(r[k]).ljust(widths[k]) for k in keys))
-    print(f"\n{len(rows)} penny stock(s) fetched.")
+    print(f"\n{len(rows)} stock(s) fetched.")
 
 
 def main():
@@ -107,12 +151,19 @@ def main():
         default=default_from_datetime(),
         help="ISO-8601 from-datetime (default: %(default)s)",
     )
+    parser.add_argument(
+        "--max",
+        dest="max_stocks",
+        type=int,
+        default=MAX_STOCKS,
+        help="maximum number of stocks to fetch (default: %(default)s)",
+    )
     parser.add_argument("--csv", help="also write results to this CSV file")
     parser.add_argument("--json", help="also write raw results to this JSON file")
     args = parser.parse_args()
 
     try:
-        records = fetch_penny_stocks(args.from_datetime)
+        records = fetch_penny_stocks(args.from_datetime, args.max_stocks)
     except (requests.RequestException, ValueError) as exc:
         print(f"Failed to fetch penny stocks: {exc}", file=sys.stderr)
         sys.exit(1)
