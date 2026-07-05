@@ -6,7 +6,9 @@ https://api.swaggystocks.com/v1/pennystocks/top-tickers?from-datetime=<ISO8601>
 
 By default the "from-datetime" is the last 7 days (matching the API's own
 week-lookback style), but a specific timestamp can be passed on the command
-line. Results are printed as a table and optionally saved to CSV/JSON.
+line. Each ticker is then enriched with the full company name and current
+trading price (via Yahoo Finance). Results are printed as a table and
+optionally saved to CSV/JSON.
 
 Install deps once:
     pip install requests --break-system-packages
@@ -25,6 +27,8 @@ import sys
 from datetime import datetime, timedelta, timezone
 
 import requests
+
+from StockQuotes import enrich_with_quotes
 
 API_URL = "https://api.swaggystocks.com/v1/pennystocks/top-tickers"
 HEADERS = {
@@ -238,6 +242,7 @@ def main():
         print(f"Failed to fetch penny stocks: {exc}", file=sys.stderr)
         sys.exit(1)
 
+    enrich_with_quotes(records)
     keys, rows = normalize(records)
     print_table(keys, rows)
 
