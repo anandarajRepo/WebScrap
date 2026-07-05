@@ -48,15 +48,13 @@ def default_from_datetime():
     return dt.replace(microsecond=0).isoformat()
 
 
-def _request_page(from_datetime, limit, offset):
+def _request_page(from_datetime, extra_params):
     """Fetch one page of ticker records from the API."""
+    params = {"from-datetime": from_datetime}
+    params.update(extra_params)
     resp = requests.get(
         API_URL,
-        params={
-            "from-datetime": from_datetime,
-            "limit": limit,
-            "offset": offset,
-        },
+        params=params,
         headers=HEADERS,
         timeout=REQUEST_TIMEOUT,
     )
@@ -82,33 +80,55 @@ def _record_id(rec):
     return json.dumps(rec, sort_keys=True)
 
 
-def fetch_penny_stocks(from_datetime, max_stocks=MAX_STOCKS):
-    """Return up to ``max_stocks`` ticker records, paginating as needed.
+def _paginate(from_datetime, max_stocks, records, seen, make_params):
+    """Walk pages built by ``make_params(page_index, offset)`` until done.
 
-    The API caps un-paginated responses (e.g. at 15 records), so we ask for an
-    explicit ``limit`` and walk ``offset`` pages until we have ``max_stocks``
-    records, the API runs out, or it starts repeating records (i.e. it
-    ignores pagination parameters).
+    Returns True if this strategy made progress (added at least one record
+    beyond what was already collected). The API caps every response at ~15
+    records no matter what ``limit`` is asked for, so a short page does NOT
+    mean the data ran out — we only stop on an empty page, a page with no
+    new records (pagination params ignored / data exhausted), or reaching
+    ``max_stocks``.
     """
-    records = []
-    seen = set()
-    offset = 0
+    progressed = False
+    page_index = 0
     while len(records) < max_stocks:
-        limit = min(PAGE_SIZE, max_stocks - len(records))
-        page = _request_page(from_datetime, limit, offset)
+        page = _request_page(from_datetime, make_params(page_index, len(records)))
         if not page:
             break
         new = [r for r in page if _record_id(r) not in seen]
-        if not new:  # API repeated a page -> it ignores offset; stop
+        if not new:
             break
+        progressed = True
         for rec in new:
             seen.add(_record_id(rec))
             records.append(rec)
             if len(records) >= max_stocks:
                 break
-        if len(page) < limit:  # short page -> no more data
-            break
-        offset += len(page)
+        page_index += 1
+    return progressed
+
+
+def fetch_penny_stocks(from_datetime, max_stocks=MAX_STOCKS):
+    """Return up to ``max_stocks`` ticker records, paginating as needed.
+
+    Tries offset-based pagination first; if the API ignores ``offset``
+    (second page repeats the first), falls back to page-number pagination.
+    """
+    records = []
+    seen = set()
+
+    _paginate(
+        from_datetime, max_stocks, records, seen,
+        lambda page_index, offset: {"limit": PAGE_SIZE, "offset": offset},
+    )
+    if 0 < len(records) < max_stocks:
+        # Offset may have been ignored; try page-number pagination, starting
+        # from page 2 (page 1 is what we already have).
+        _paginate(
+            from_datetime, max_stocks, records, seen,
+            lambda page_index, offset: {"limit": PAGE_SIZE, "page": page_index + 2},
+        )
     return records
 
 
