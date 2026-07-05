@@ -1,5 +1,5 @@
 """
-swaggystocks.py
+WeeklyTrendingPennyStocks.py
 
 Fetches all penny stocks (top tickers) from the SwaggyStocks API:
 https://api.swaggystocks.com/v1/pennystocks/top-tickers?from-datetime=<ISO8601>
@@ -12,10 +12,10 @@ Install deps once:
     pip install requests --break-system-packages
 
 Usage:
-    python3 swaggystocks.py                                   # last 7 days
-    python3 swaggystocks.py --from "2026-06-28T04:29:58-04:00"
-    python3 swaggystocks.py --csv pennystocks.csv             # also write CSV
-    python3 swaggystocks.py --json pennystocks.json           # also write JSON
+    python3 WeeklyTrendingPennyStocks.py                                   # last 7 days
+    python3 WeeklyTrendingPennyStocks.py --from "2026-06-28T04:29:58-04:00"
+    python3 WeeklyTrendingPennyStocks.py --csv pennystocks.csv             # also write CSV
+    python3 WeeklyTrendingPennyStocks.py --json pennystocks.json           # also write JSON
 """
 
 import argparse
