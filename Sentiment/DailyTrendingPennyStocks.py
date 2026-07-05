@@ -41,7 +41,7 @@ HEADERS = {
     "Origin": "https://swaggystocks.com",
     "Referer": "https://swaggystocks.com/",
 }
-DEFAULT_LOOKBACK_DAYS = 30
+DEFAULT_LOOKBACK_DAYS = 7
 REQUEST_TIMEOUT = 30
 
 
