@@ -68,12 +68,15 @@ def fetch_penny_stocks(from_datetime):
     raise ValueError(f"Unexpected API response shape: {type(data).__name__}")
 
 
+EXCLUDED_COLUMNS = {"date", "timestamp", "starting_date", "ending_date"}
+
+
 def normalize(records):
     """Flatten records into rows of plain scalar values, union of all keys."""
     keys = []
     for rec in records:
         for k in rec:
-            if k not in keys:
+            if k not in keys and k not in EXCLUDED_COLUMNS:
                 keys.append(k)
     rows = []
     for rec in records:
