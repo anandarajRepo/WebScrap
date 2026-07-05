@@ -48,6 +48,14 @@ def default_from_datetime():
     return dt.replace(microsecond=0).isoformat()
 
 
+def _parse_iso(value):
+    """Parse an ISO-8601 string into an aware datetime (UTC if naive)."""
+    dt = datetime.fromisoformat(value)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt
+
+
 def _request_page(from_datetime, extra_params):
     """Fetch one page of ticker records from the API."""
     params = {"from-datetime": from_datetime}
@@ -113,7 +121,10 @@ def fetch_penny_stocks(from_datetime, max_stocks=MAX_STOCKS):
     """Return up to ``max_stocks`` ticker records, paginating as needed.
 
     Tries offset-based pagination first; if the API ignores ``offset``
-    (second page repeats the first), falls back to page-number pagination.
+    (second page repeats the first), falls back to page-number pagination,
+    then to sweeping day-sized ``from-datetime`` windows across the lookback
+    range (the API caps every response at ~15 records regardless of
+    pagination params, but different windows surface different tickers).
     """
     records = []
     seen = set()
@@ -129,7 +140,46 @@ def fetch_penny_stocks(from_datetime, max_stocks=MAX_STOCKS):
             from_datetime, max_stocks, records, seen,
             lambda page_index, offset: {"limit": PAGE_SIZE, "page": page_index + 2},
         )
+    if 0 < len(records) < max_stocks:
+        # The API ignores every pagination parameter and hard-caps each
+        # response at ~15 records for a given window. The only lever left is
+        # the window itself: slice the lookback range into per-day windows,
+        # query each one, and merge the (deduplicated) results.
+        _sweep_windows(from_datetime, max_stocks, records, seen)
     return records
+
+
+def _sweep_windows(from_datetime, max_stocks, records, seen):
+    """Fetch each day-sized slice of the lookback window and merge results.
+
+    Each request still returns at most ~15 records, but different windows
+    surface different tickers, so sweeping day by day accumulates far more
+    than a single call can. Duplicates across windows are dropped via
+    ``seen``. Per-window request failures are skipped so one bad slice
+    doesn't lose the rest.
+    """
+    try:
+        start = _parse_iso(from_datetime)
+    except ValueError:
+        return
+    now = datetime.now(timezone.utc)
+    window_start = start
+    while window_start < now and len(records) < max_stocks:
+        try:
+            page = _request_page(
+                window_start.replace(microsecond=0).isoformat(), {}
+            )
+        except (requests.RequestException, ValueError):
+            page = []
+        for rec in page:
+            rid = _record_id(rec)
+            if rid in seen:
+                continue
+            seen.add(rid)
+            records.append(rec)
+            if len(records) >= max_stocks:
+                return
+        window_start += timedelta(days=1)
 
 
 EXCLUDED_COLUMNS = {"date", "timestamp", "starting_date", "ending_date"}
