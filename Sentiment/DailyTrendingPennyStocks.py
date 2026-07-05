@@ -6,8 +6,9 @@ daily basis for the last 30 days:
 https://api.swaggystocks.com/v1/pennystocks/top-tickers?from-datetime=<ISO8601>
 
 The lookback range is sliced into one-day windows; each day is queried
-separately and its trending tickers are printed as a table (same table style
-as WeeklyTrendingPennyStocks.py). Results can optionally be saved to
+separately, each ticker is enriched with the full company name and current
+trading price (via Yahoo Finance), and its trending tickers are printed as a
+table (same table style as WeeklyTrendingPennyStocks.py). Results can optionally be saved to
 CSV/JSON, with each record tagged with the day it trended on.
 
 Install deps once:
@@ -27,6 +28,8 @@ import sys
 from datetime import datetime, timedelta, timezone
 
 import requests
+
+from StockQuotes import enrich_with_quotes
 
 API_URL = "https://api.swaggystocks.com/v1/pennystocks/top-tickers"
 HEADERS = {
@@ -147,6 +150,8 @@ def main():
     args = parser.parse_args()
 
     daily = fetch_daily_penny_stocks(args.days)
+    # Enrich all days in one pass so each symbol is looked up only once.
+    enrich_with_quotes([rec for _, records in daily for rec in records])
     print_daily(daily)
 
     if args.json:
