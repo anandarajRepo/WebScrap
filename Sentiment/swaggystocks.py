@@ -38,6 +38,10 @@ HEADERS = {
 }
 DEFAULT_LOOKBACK_DAYS = 7
 REQUEST_TIMEOUT = 30
+# The API returns at most ~15 records per request, so results are paged with
+# limit/offset until a short, empty, or repeated page signals the end.
+PAGE_SIZE = 100
+MAX_PAGES = 200  # safety ceiling so a misbehaving API can't loop forever
 
 
 def default_from_datetime():
@@ -46,11 +50,11 @@ def default_from_datetime():
     return dt.replace(microsecond=0).isoformat()
 
 
-def fetch_penny_stocks(from_datetime):
-    """Return the full list of penny-stock ticker records from the API."""
+def fetch_page(from_datetime, limit, offset):
+    """Fetch one page of ticker records from the API."""
     resp = requests.get(
         API_URL,
-        params={"from-datetime": from_datetime},
+        params={"from-datetime": from_datetime, "limit": limit, "offset": offset},
         headers=HEADERS,
         timeout=REQUEST_TIMEOUT,
     )
@@ -66,6 +70,41 @@ def fetch_penny_stocks(from_datetime):
             if isinstance(data.get(key), list):
                 return data[key]
     raise ValueError(f"Unexpected API response shape: {type(data).__name__}")
+
+
+def record_key(rec):
+    """Identity of a record, used to dedupe across pages."""
+    for k in ("ticker", "symbol", "name"):
+        if rec.get(k):
+            return rec[k]
+    return json.dumps(rec, sort_keys=True)
+
+
+def fetch_penny_stocks(from_datetime, page_size=PAGE_SIZE):
+    """Return the entire list of penny stocks, paging until exhausted.
+
+    Pages with limit/offset. Stops on an empty or short page, or if a page
+    yields nothing new (i.e. the API ignores the offset parameter and keeps
+    returning the same records).
+    """
+    records = []
+    seen = set()
+    offset = 0
+    for _ in range(MAX_PAGES):
+        batch = fetch_page(from_datetime, page_size, offset)
+        if not batch:
+            break
+        new = [r for r in batch if record_key(r) not in seen]
+        for r in new:
+            seen.add(record_key(r))
+        records.extend(new)
+        if not new:
+            break
+        # Advance by what the API actually returned: it may cap "limit"
+        # below the requested page size, and a fixed stride would then
+        # skip records.
+        offset += len(batch)
+    return records
 
 
 def normalize(records):
@@ -104,12 +143,18 @@ def main():
         default=default_from_datetime(),
         help="ISO-8601 from-datetime (default: %(default)s)",
     )
+    parser.add_argument(
+        "--page-size",
+        type=int,
+        default=PAGE_SIZE,
+        help="records requested per API call (default: %(default)s)",
+    )
     parser.add_argument("--csv", help="also write results to this CSV file")
     parser.add_argument("--json", help="also write raw results to this JSON file")
     args = parser.parse_args()
 
     try:
-        records = fetch_penny_stocks(args.from_datetime)
+        records = fetch_penny_stocks(args.from_datetime, args.page_size)
     except (requests.RequestException, ValueError) as exc:
         print(f"Failed to fetch penny stocks: {exc}", file=sys.stderr)
         sys.exit(1)
