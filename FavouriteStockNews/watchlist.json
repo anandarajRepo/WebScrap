@@ -1,0 +1,29 @@
+{
+  "tickers": [
+    {
+      "ticker": "RELIANCE",
+      "name": "Reliance Industries",
+      "aliases": ["Reliance", "RIL", "Reliance Industries", "Reliance Jio", "Mukesh Ambani"]
+    },
+    {
+      "ticker": "TCS",
+      "name": "Tata Consultancy Services",
+      "aliases": ["TCS", "Tata Consultancy", "Tata Consultancy Services"]
+    },
+    {
+      "ticker": "INFY",
+      "name": "Infosys",
+      "aliases": ["Infosys", "INFY", "Infosys Ltd"]
+    },
+    {
+      "ticker": "HDFCBANK",
+      "name": "HDFC Bank",
+      "aliases": ["HDFC Bank", "HDFCBANK", "HDFC"]
+    },
+    {
+      "ticker": "ICICIBANK",
+      "name": "ICICI Bank",
+      "aliases": ["ICICI Bank", "ICICIBANK", "ICICI"]
+    }
+  ]
+}
