@@ -54,5 +54,13 @@
     "published_date": "2026-08-24T03:01:56+00:00",
     "matched_ticker": "RELIANCE",
     "fetch_timestamp": "2026-08-24T06:00:13.628098+00:00"
+  },
+  {
+    "title": "ICICI Bank Share Price Live Updates: ICICI Bank News",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/icici-bank-share-price-live-24-aug-2026/liveblog/133450529.cms",
+    "published_date": "2026-08-24T03:41:42+00:00",
+    "matched_ticker": "ICICIBANK",
+    "fetch_timestamp": "2026-08-24T08:09:54.028519+00:00"
   }
 ]
