@@ -6,5 +6,13 @@
     "published_date": "2026-08-23T19:35:54+00:00",
     "matched_ticker": "HDFCBANK",
     "fetch_timestamp": "2026-08-24T00:38:06.637804+00:00"
+  },
+  {
+    "title": "Stocks in news: Reliance Industries, Bank of Baroda, Power Grid, NATCO Pharma and JSW Infra",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/stocks-in-news-reliance-industries-bank-of-baroda-power-grid-natco-pharma-and-jsw-infra/articleshow/133444199.cms",
+    "published_date": "2026-08-24T00:30:00+00:00",
+    "matched_ticker": "RELIANCE",
+    "fetch_timestamp": "2026-08-24T02:16:03.366426+00:00"
   }
 ]
