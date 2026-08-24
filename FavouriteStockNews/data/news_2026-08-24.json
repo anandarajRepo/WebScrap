@@ -22,5 +22,29 @@
     "published_date": "2026-08-24T02:03:34+00:00",
     "matched_ticker": "INFY",
     "fetch_timestamp": "2026-08-24T04:21:36.187660+00:00"
+  },
+  {
+    "title": "TCS Share Price Live Updates: TCS Current Trading Status",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/tcs-stock-price-today-live-24-aug-2026/liveblog/133450245.cms",
+    "published_date": "2026-08-24T03:20:04+00:00",
+    "matched_ticker": "TCS",
+    "fetch_timestamp": "2026-08-24T05:08:17.258138+00:00"
+  },
+  {
+    "title": "Infosys Share Price Live Updates: Infosys Stock Details",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/infosys-stock-price-livestock-price-today-live-updates-24-aug-2026/liveblog/133449994.cms",
+    "published_date": "2026-08-24T03:00:29+00:00",
+    "matched_ticker": "INFY",
+    "fetch_timestamp": "2026-08-24T05:08:17.258138+00:00"
+  },
+  {
+    "title": "HDFC Bank Share Price Live Updates: HDFC Bank Stock Details",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-stock-price-live-updates-24-aug-2026/liveblog/133449902.cms",
+    "published_date": "2026-08-24T02:55:04+00:00",
+    "matched_ticker": "HDFCBANK",
+    "fetch_timestamp": "2026-08-24T05:08:17.258138+00:00"
   }
 ]
