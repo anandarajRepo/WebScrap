@@ -86,5 +86,13 @@
     "published_date": "2026-08-24T12:30:31+00:00",
     "matched_ticker": "ICICIBANK",
     "fetch_timestamp": "2026-08-24T13:28:27.958603+00:00"
+  },
+  {
+    "title": "ICICI raises $1 billion, Union Bank $600 million through dollar bonds",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/bonds/icici-raises-1-billion-union-bank-600-million-through-dollar-bonds/articleshow/133470684.cms",
+    "published_date": "2026-08-24T14:27:07+00:00",
+    "matched_ticker": "ICICIBANK",
+    "fetch_timestamp": "2026-08-24T15:07:27.325514+00:00"
   }
 ]
