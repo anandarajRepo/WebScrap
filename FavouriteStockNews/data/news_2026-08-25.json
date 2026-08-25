@@ -54,5 +54,21 @@
     "published_date": "2026-08-25T02:45:06+00:00",
     "matched_ticker": "HDFCBANK",
     "fetch_timestamp": "2026-08-25T05:01:34.622102+00:00"
+  },
+  {
+    "title": "TCS-Porsche deal: Why Morgan Stanley, Citi, other brokerages still see up to 20% downside potential",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/tcs-porsche-deal-why-morgan-stanley-citi-other-brokerages-still-see-up-to-20-downside-potential/articleshow/133493948.cms",
+    "published_date": "2026-08-25T05:15:12+00:00",
+    "matched_ticker": "TCS",
+    "fetch_timestamp": "2026-08-25T05:54:34.295189+00:00"
+  },
+  {
+    "title": "TCS Share Price Live Updates: TCS Current Price Update",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/tcs-stock-price-live-updates-25-aug-2026/liveblog/133488489.cms",
+    "published_date": "2026-08-25T02:55:21+00:00",
+    "matched_ticker": "TCS",
+    "fetch_timestamp": "2026-08-25T05:54:34.295189+00:00"
   }
 ]
