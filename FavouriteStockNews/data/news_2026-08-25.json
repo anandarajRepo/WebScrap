@@ -14,5 +14,45 @@
     "published_date": "2026-08-25T02:30:35+00:00",
     "matched_ticker": "ICICIBANK",
     "fetch_timestamp": "2026-08-25T04:06:07.512185+00:00"
+  },
+  {
+    "title": "Fall of market leaders! How 6 Nifty giants trapped investors with negative returns for 5 years",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/fall-of-market-leaders-how-6-nifty-giants-trapped-investors-with-negative-returns-for-5-years/articleshow/133491673.cms",
+    "published_date": "2026-08-25T04:31:19+00:00",
+    "matched_ticker": "TCS",
+    "fetch_timestamp": "2026-08-25T05:01:34.622102+00:00"
+  },
+  {
+    "title": "Infosys, TCS, Wipro and other IT stocks in focus as Donald Trump administration proposes higher H-1B visa fee",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/infosys-tcs-wipro-and-other-it-stocks-in-focus-as-donald-trump-administration-proposes-higher-h-1b-visa-fee/articleshow/133490126.cms",
+    "published_date": "2026-08-25T04:05:58+00:00",
+    "matched_ticker": "TCS",
+    "fetch_timestamp": "2026-08-25T05:01:34.622102+00:00"
+  },
+  {
+    "title": "RIL Share Price Live Updates: RIL's Recent Trading Insights",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/ril-stock-price-live-updates-25-aug-2026/liveblog/133488854.cms",
+    "published_date": "2026-08-25T03:07:04+00:00",
+    "matched_ticker": "RELIANCE",
+    "fetch_timestamp": "2026-08-25T05:01:34.622102+00:00"
+  },
+  {
+    "title": "Infosys Share Price Live Updates: Infosys Price Fluctuation",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/infosys-stock-price-livestock-price-today-live-updates-25-aug-2026/liveblog/133488359.cms",
+    "published_date": "2026-08-25T02:50:05+00:00",
+    "matched_ticker": "INFY",
+    "fetch_timestamp": "2026-08-25T05:01:34.622102+00:00"
+  },
+  {
+    "title": "HDFC Life Share Price Live Updates: HDFC Life Stock Details",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-life-share-price-today-live-25-aug-2026/liveblog/133488212.cms",
+    "published_date": "2026-08-25T02:45:06+00:00",
+    "matched_ticker": "HDFCBANK",
+    "fetch_timestamp": "2026-08-25T05:01:34.622102+00:00"
   }
 ]
