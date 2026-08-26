@@ -6,5 +6,37 @@
     "published_date": "2026-08-25T18:16:55+00:00",
     "matched_ticker": "HDFCBANK",
     "fetch_timestamp": "2026-08-26T00:38:37.784206+00:00"
+  },
+  {
+    "title": "Reliance Industries, SBI among 10 stocks with highest DII holding in Q1. Do you own any?",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/reliance-industries-sbi-among-10-stocks-with-highest-dii-holding-in-q1-do-you-own-any/slideshow/133528902.cms",
+    "published_date": "2026-08-26T03:39:21+00:00",
+    "matched_ticker": "RELIANCE",
+    "fetch_timestamp": "2026-08-26T04:29:39.066867+00:00"
+  },
+  {
+    "title": "RIL Share Price Live Updates: RIL posts a solid monthly return",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/ril-share-price-live-updates-26-aug-2026/liveblog/133528046.cms",
+    "published_date": "2026-08-26T02:55:19+00:00",
+    "matched_ticker": "RELIANCE",
+    "fetch_timestamp": "2026-08-26T04:29:39.066867+00:00"
+  },
+  {
+    "title": "TCS Share Price Live Updates: TCS Current Price Update",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/tcs-stock-price-livestock-price-today-live-updates-26-aug-2026/liveblog/133527925.cms",
+    "published_date": "2026-08-26T02:47:30+00:00",
+    "matched_ticker": "TCS",
+    "fetch_timestamp": "2026-08-26T04:29:39.066867+00:00"
+  },
+  {
+    "title": "HDFC Bank Share Price Live Updates: HDFC Bank experiences a decline in returns",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-share-price-today-live-26-aug-2026/liveblog/133527743.cms",
+    "published_date": "2026-08-26T02:30:50+00:00",
+    "matched_ticker": "HDFCBANK",
+    "fetch_timestamp": "2026-08-26T04:29:39.066867+00:00"
   }
 ]
