@@ -38,5 +38,29 @@
     "published_date": "2026-08-26T02:30:50+00:00",
     "matched_ticker": "HDFCBANK",
     "fetch_timestamp": "2026-08-26T04:29:39.066867+00:00"
+  },
+  {
+    "title": "HDFC Life Share Price Live Updates: HDFC Life's Current Market Position",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-life-stock-price-today-live-26-aug-2026/liveblog/133528372.cms",
+    "published_date": "2026-08-26T03:15:21+00:00",
+    "matched_ticker": "HDFCBANK",
+    "fetch_timestamp": "2026-08-26T05:06:05.202784+00:00"
+  },
+  {
+    "title": "Infosys Share Price Live Updates: Infosys Stock Details",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/infosys-stock-price-livestock-price-today-live-updates-26-aug-2026/liveblog/133528318.cms",
+    "published_date": "2026-08-26T03:11:22+00:00",
+    "matched_ticker": "INFY",
+    "fetch_timestamp": "2026-08-26T05:06:05.202784+00:00"
+  },
+  {
+    "title": "ICICI Bank Share Price Live Updates: ICICI Bank Shows Strong Market Performance",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/icici-bank-stock-price-livestock-price-today-live-updates-26-aug-2026/liveblog/133527953.cms",
+    "published_date": "2026-08-26T02:50:05+00:00",
+    "matched_ticker": "ICICIBANK",
+    "fetch_timestamp": "2026-08-26T05:06:05.202784+00:00"
   }
 ]
