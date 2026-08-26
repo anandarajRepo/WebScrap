@@ -62,5 +62,21 @@
     "published_date": "2026-08-26T02:50:05+00:00",
     "matched_ticker": "ICICIBANK",
     "fetch_timestamp": "2026-08-26T05:06:05.202784+00:00"
+  },
+  {
+    "title": "Sensex falls 183 points, Nifty closes below 24,250 as market erases all morning gains. What lies ahead?",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/sensex-falls-183-points-nifty-closes-below-24250-as-market-erases-all-morning-gains-what-lies-ahead/articleshow/133537326.cms",
+    "published_date": "2026-08-26T10:11:49+00:00",
+    "matched_ticker": "INFY",
+    "fetch_timestamp": "2026-08-26T10:58:12.051099+00:00"
+  },
+  {
+    "title": "Adani’s Cemindia is said to near up to $524 million share sale",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/adanis-cemindia-is-said-to-near-up-to-524-million-share-sale/articleshow/133536591.cms",
+    "published_date": "2026-08-26T09:46:36+00:00",
+    "matched_ticker": "ICICIBANK",
+    "fetch_timestamp": "2026-08-26T10:58:12.051099+00:00"
   }
 ]
