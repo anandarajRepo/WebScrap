@@ -46,5 +46,21 @@
     "published_date": "2026-08-28T05:46:37+00:00",
     "matched_ticker": "TCS",
     "fetch_timestamp": "2026-08-28T13:30:34.471151+00:00"
+  },
+  {
+    "title": "Lenskart Rs 1,857-crore block deal: Goldman Sachs, Morgan Stanley, ICICI Prudential, SBI MF among buyers as Alpha Wave exits",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/lenskart-rs-1857-crore-block-deal-goldman-sachs-morgan-stanley-icici-prudential-sbi-mf-among-buyers-as-alpha-wave-exits/articleshow/133594276.cms",
+    "published_date": "2026-08-28T14:55:19+00:00",
+    "matched_ticker": "ICICIBANK",
+    "fetch_timestamp": "2026-08-28T23:16:19.239756+00:00"
+  },
+  {
+    "title": "Reliance Jio IPO approved: Is it too late to buy RIL shares to be eligible for shareholder quota?",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/ipos/fpos/reliance-jio-ipo-approved-is-it-too-late-to-buy-ril-shares-to-be-eligible-for-shareholder-quota/articleshow/133592960.cms",
+    "published_date": "2026-08-28T14:07:00+00:00",
+    "matched_ticker": "RELIANCE",
+    "fetch_timestamp": "2026-08-28T23:16:19.239756+00:00"
   }
 ]
