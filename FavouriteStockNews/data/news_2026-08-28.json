@@ -6,5 +6,45 @@
     "published_date": "2026-08-27T19:25:33+00:00",
     "matched_ticker": "HDFCBANK",
     "fetch_timestamp": "2026-08-28T01:33:36.858856+00:00"
+  },
+  {
+    "title": "Sebi approves 7 IPOs including Jio Platforms, Paras Healthcare and Bharat PET",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/ipos/fpos/sebi-approves-7-ipos-including-jio-platforms-paras-healthcare-and-bharat-pet/articleshow/133590542.cms",
+    "published_date": "2026-08-28T11:52:49+00:00",
+    "matched_ticker": "RELIANCE",
+    "fetch_timestamp": "2026-08-28T13:30:34.471151+00:00"
+  },
+  {
+    "title": "Jio IPO soon! RIL's telecom arm gets Sebi nod for Rs 37,700 crore offering",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/ipos/fpos/jio-ipo-soon-reliances-telecom-arm-gets-sebi-nod-for-rs-37000-crore-offering/articleshow/133590054.cms",
+    "published_date": "2026-08-28T11:18:38+00:00",
+    "matched_ticker": "RELIANCE",
+    "fetch_timestamp": "2026-08-28T13:30:34.471151+00:00"
+  },
+  {
+    "title": "Market wrap: TCS, Tech Mahindra, ICICI Bank, ITC top gainers and losers on Nifty and Sensex on Friday",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/market-wrap-tcs-tech-mahindra-icici-bank-itc-top-gainers-and-losers-on-nifty-and-sensex-on-friday/articleshow/133589753.cms",
+    "published_date": "2026-08-28T11:04:20+00:00",
+    "matched_ticker": "TCS",
+    "fetch_timestamp": "2026-08-28T13:30:34.471151+00:00"
+  },
+  {
+    "title": "HCLTech, TCS, Infosys, other IT stocks rally up to 5%. What lies ahead?",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/hcltech-tcs-infosys-other-it-stocks-rally-up-to-5-what-lies-ahead/articleshow/133584340.cms",
+    "published_date": "2026-08-28T05:49:33+00:00",
+    "matched_ticker": "TCS",
+    "fetch_timestamp": "2026-08-28T13:30:34.471151+00:00"
+  },
+  {
+    "title": "Tejas Networks shares zoom 13% after TCS’s Rs 1,537-crore LOI for BSNL 4G rollout",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/tejas-networks-shares-zoom-13-after-tcss-rs-1537-crore-loi-for-bsnl-4g-rollout/articleshow/133584293.cms",
+    "published_date": "2026-08-28T05:46:37+00:00",
+    "matched_ticker": "TCS",
+    "fetch_timestamp": "2026-08-28T13:30:34.471151+00:00"
   }
 ]
