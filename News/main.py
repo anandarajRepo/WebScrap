@@ -4,22 +4,29 @@ Uses the Google News RSS feed (no API key required).
 
 By default this reads the watchlist at ``resources/watchlist.json`` and fetches
 news for every stock in it. You can also pass a single stock name on the command
-line to fetch news for just that stock.
+line to fetch news for just that stock, or launch a browser UI to view all the
+news interactively.
 
 Usage:
     python main.py                      # fetch news for every stock in the watchlist
     python main.py "Aequs Ltd"          # fetch news for a single stock
     python main.py --days 30            # only news from the last 30 days
     python main.py --watchlist path.json  # use a custom watchlist file
+    python main.py --serve              # open a browser UI to view all stock news
+    python main.py --serve --port 8080  # serve the UI on a specific port
 """
 
 import argparse
 import json
 import os
 import sys
+import threading
+import webbrowser
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
-from urllib.parse import quote_plus
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import parse_qs, quote_plus, urlparse
 from xml.etree import ElementTree
 
 import requests
@@ -127,6 +134,403 @@ def fetch_watchlist_news(days=None, watchlist_path=DEFAULT_WATCHLIST):
         print_news(stock, articles)
 
 
+# ---------------------------------------------------------------------------
+# Browser UI
+# ---------------------------------------------------------------------------
+
+def _article_to_json(article):
+    """Convert an article dict (with a datetime) into a JSON-serialisable dict."""
+    pub_date = article["date"]
+    return {
+        "headline": article["headline"],
+        "link": article["link"],
+        "source": article["source"],
+        "date": pub_date.isoformat() if pub_date else None,
+        "date_label": pub_date.strftime("%d %b %Y (%A)") if pub_date else "Unknown date",
+    }
+
+
+def collect_watchlist_news(days=None, watchlist_path=DEFAULT_WATCHLIST, max_workers=8):
+    """Fetch news for every watchlist stock and return a JSON-serialisable list.
+
+    Each entry is ``{ticker, name, articles, error}``. Fetches run concurrently
+    so the browser UI does not stall on a long watchlist.
+    """
+    tickers = load_watchlist(watchlist_path)
+
+    def _fetch_entry(entry):
+        stock = entry.get("name") or entry.get("ticker")
+        result = {
+            "ticker": entry.get("ticker", ""),
+            "name": stock or entry.get("ticker", ""),
+            "articles": [],
+            "error": None,
+        }
+        if not stock:
+            result["error"] = "Watchlist entry has no name or ticker."
+            return result
+        try:
+            articles = fetch_news(stock, days=days)
+            result["articles"] = [_article_to_json(a) for a in articles]
+        except requests.RequestException as exc:
+            result["error"] = str(exc)
+        return result
+
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        results = list(pool.map(_fetch_entry, tickers))
+    return results
+
+
+PAGE_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stock News</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --panel-2: #273449;
+    --border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-2: #22c55e;
+    --danger: #f87171;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+  }
+  .header-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 20px; margin: 0; display: flex; align-items: center; gap: 8px; }
+  h1 .dot { color: var(--accent); }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; align-items: center; }
+  input[type="search"], select {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+  }
+  input[type="search"] { min-width: 220px; }
+  input[type="search"]:focus, select:focus { border-color: var(--accent); }
+  button {
+    background: var(--accent);
+    color: #06263a;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:disabled { opacity: 0.6; cursor: default; }
+  .meta { max-width: 1100px; margin: 8px auto 0; color: var(--muted); font-size: 13px; }
+  main { max-width: 1100px; margin: 24px auto; padding: 0 24px 64px; }
+  .stock {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .stock-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .stock-head:hover { background: var(--panel-2); }
+  .stock-name { font-weight: 600; font-size: 16px; }
+  .ticker {
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(56, 189, 248, 0.12);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .count { color: var(--muted); font-size: 13px; margin-left: auto; }
+  .chevron { color: var(--muted); transition: transform 0.15s; }
+  .stock.collapsed .chevron { transform: rotate(-90deg); }
+  .stock.collapsed .stock-body { display: none; }
+  .stock-body { padding: 4px 18px 14px; }
+  .day-group { margin-top: 12px; }
+  .day-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+  .article { padding: 6px 0; }
+  .article a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .article a:hover { color: var(--accent); text-decoration: underline; }
+  .article .source { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .empty { color: var(--muted); font-size: 14px; padding: 8px 0; }
+  .error { color: var(--danger); font-size: 14px; padding: 8px 0; }
+  .banner {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+  .spinner {
+    width: 28px; height: 28px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-row">
+    <h1><span class="dot">&#9679;</span> Stock News</h1>
+    <div class="controls">
+      <input id="search" type="search" placeholder="Filter stocks or headlines...">
+      <select id="days">
+        <option value="">All time</option>
+        <option value="1">Last 24 hours</option>
+        <option value="3">Last 3 days</option>
+        <option value="7" selected>Last 7 days</option>
+        <option value="30">Last 30 days</option>
+        <option value="90">Last 90 days</option>
+      </select>
+      <button id="refresh">Refresh</button>
+    </div>
+  </div>
+  <div class="meta" id="meta">Loading watchlist news...</div>
+</header>
+<main id="content">
+  <div class="banner"><div class="spinner"></div>Fetching the latest news for your watchlist...</div>
+</main>
+
+<script>
+const contentEl = document.getElementById('content');
+const metaEl = document.getElementById('meta');
+const searchEl = document.getElementById('search');
+const daysEl = document.getElementById('days');
+const refreshBtn = document.getElementById('refresh');
+let allData = [];
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : s;
+  return d.innerHTML;
+}
+
+function groupByDay(articles) {
+  const groups = [];
+  const index = {};
+  for (const a of articles) {
+    const key = a.date_label;
+    if (!(key in index)) {
+      index[key] = groups.length;
+      groups.push({ label: key, items: [] });
+    }
+    groups[index[key]].items.push(a);
+  }
+  return groups;
+}
+
+function render() {
+  const q = searchEl.value.trim().toLowerCase();
+  let totalArticles = 0;
+  let shownStocks = 0;
+  const frag = document.createDocumentFragment();
+
+  for (const stock of allData) {
+    const nameMatch = !q || stock.name.toLowerCase().includes(q) ||
+      (stock.ticker && stock.ticker.toLowerCase().includes(q));
+    const articles = q && !nameMatch
+      ? stock.articles.filter(a => a.headline.toLowerCase().includes(q) ||
+          (a.source && a.source.toLowerCase().includes(q)))
+      : stock.articles;
+
+    if (q && !nameMatch && articles.length === 0) continue;
+    shownStocks++;
+    totalArticles += articles.length;
+
+    const card = document.createElement('div');
+    card.className = 'stock' + (articles.length === 0 ? ' collapsed' : '');
+
+    let bodyHtml = '';
+    if (stock.error) {
+      bodyHtml = '<div class="error">Failed to fetch: ' + esc(stock.error) + '</div>';
+    } else if (articles.length === 0) {
+      bodyHtml = '<div class="empty">No news found.</div>';
+    } else {
+      for (const g of groupByDay(articles)) {
+        bodyHtml += '<div class="day-group"><div class="day-label">' + esc(g.label) + '</div>';
+        for (const a of g.items) {
+          const src = a.source ? '<span class="source">' + esc(a.source) + '</span>' : '';
+          bodyHtml += '<div class="article"><a href="' + esc(a.link) +
+            '" target="_blank" rel="noopener">' + esc(a.headline) + '</a>' + src + '</div>';
+        }
+        bodyHtml += '</div>';
+      }
+    }
+
+    const tickerHtml = stock.ticker ? '<span class="ticker">' + esc(stock.ticker) + '</span>' : '';
+    card.innerHTML =
+      '<div class="stock-head">' +
+        '<span class="chevron">&#9660;</span>' +
+        '<span class="stock-name">' + esc(stock.name) + '</span>' +
+        tickerHtml +
+        '<span class="count">' + articles.length + ' article' + (articles.length === 1 ? '' : 's') + '</span>' +
+      '</div>' +
+      '<div class="stock-body">' + bodyHtml + '</div>';
+
+    card.querySelector('.stock-head').addEventListener('click', () => {
+      card.classList.toggle('collapsed');
+    });
+    frag.appendChild(card);
+  }
+
+  contentEl.innerHTML = '';
+  if (shownStocks === 0) {
+    contentEl.innerHTML = '<div class="banner">No stocks match your filter.</div>';
+  } else {
+    contentEl.appendChild(frag);
+  }
+  metaEl.textContent = shownStocks + ' stock' + (shownStocks === 1 ? '' : 's') +
+    ' · ' + totalArticles + ' article' + (totalArticles === 1 ? '' : 's') +
+    ' · updated ' + new Date().toLocaleTimeString();
+}
+
+async function load() {
+  refreshBtn.disabled = true;
+  contentEl.innerHTML =
+    '<div class="banner"><div class="spinner"></div>Fetching the latest news for your watchlist...</div>';
+  metaEl.textContent = 'Loading watchlist news...';
+  try {
+    const days = daysEl.value;
+    const url = '/api/news' + (days ? ('?days=' + encodeURIComponent(days)) : '');
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('Server responded ' + resp.status);
+    const data = await resp.json();
+    allData = data.stocks || [];
+    render();
+  } catch (e) {
+    contentEl.innerHTML = '<div class="banner error">Could not load news: ' + esc(e.message) + '</div>';
+    metaEl.textContent = 'Error';
+  } finally {
+    refreshBtn.disabled = false;
+  }
+}
+
+searchEl.addEventListener('input', render);
+daysEl.addEventListener('change', load);
+refreshBtn.addEventListener('click', load);
+load();
+</script>
+</body>
+</html>
+"""
+
+
+class NewsUIHandler(BaseHTTPRequestHandler):
+    """Serve the browser UI and a JSON news API."""
+
+    # Injected by the server factory below.
+    watchlist_path = DEFAULT_WATCHLIST
+    default_days = None
+
+    def _send(self, status, content_type, body):
+        if isinstance(body, str):
+            body = body.encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        parsed = urlparse(self.path)
+        if parsed.path in ("/", "/index.html"):
+            self._send(200, "text/html; charset=utf-8", PAGE_HTML)
+            return
+
+        if parsed.path == "/api/news":
+            params = parse_qs(parsed.query)
+            days = self.default_days
+            if "days" in params:
+                try:
+                    days = int(params["days"][0])
+                except (ValueError, IndexError):
+                    days = self.default_days
+            try:
+                stocks = collect_watchlist_news(days=days, watchlist_path=self.watchlist_path)
+                payload = json.dumps({"stocks": stocks})
+                self._send(200, "application/json; charset=utf-8", payload)
+            except (OSError, json.JSONDecodeError) as exc:
+                payload = json.dumps({"error": f"Failed to load watchlist: {exc}"})
+                self._send(500, "application/json; charset=utf-8", payload)
+            return
+
+        self._send(404, "text/plain; charset=utf-8", "Not found")
+
+    def log_message(self, fmt, *args):  # noqa: A003 - quieten default logging
+        # Keep the console readable: only surface API requests.
+        if args and str(args[0]).startswith(("GET /api", "POST")):
+            super().log_message(fmt, *args)
+
+
+def serve_ui(host="127.0.0.1", port=8000, days=None, watchlist_path=DEFAULT_WATCHLIST, open_browser=True):
+    """Start the browser UI server and (optionally) open a browser tab."""
+    handler = type(
+        "BoundNewsUIHandler",
+        (NewsUIHandler,),
+        {"watchlist_path": watchlist_path, "default_days": days},
+    )
+    server = ThreadingHTTPServer((host, port), handler)
+    url = f"http://{host}:{server.server_address[1]}/"
+    print(f"Serving stock news UI at {url}")
+    print("Press Ctrl+C to stop.")
+    if open_browser:
+        threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nShutting down...")
+    finally:
+        server.server_close()
+
+
 def main():
     parser = argparse.ArgumentParser(description="Fetch stock news headlines with links, grouped by date.")
     parser.add_argument(
@@ -141,9 +545,29 @@ def main():
         default=DEFAULT_WATCHLIST,
         help="Path to the watchlist JSON file (default: resources/watchlist.json)",
     )
+    parser.add_argument(
+        "--serve",
+        action="store_true",
+        help="Launch a browser UI to view all watchlist stock news.",
+    )
+    parser.add_argument("--host", default="127.0.0.1", help="Host for --serve (default: 127.0.0.1)")
+    parser.add_argument("--port", type=int, default=8000, help="Port for --serve (default: 8000)")
+    parser.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="With --serve, do not automatically open a browser tab.",
+    )
     args = parser.parse_args()
 
-    if args.stock:
+    if args.serve:
+        serve_ui(
+            host=args.host,
+            port=args.port,
+            days=args.days,
+            watchlist_path=args.watchlist,
+            open_browser=not args.no_browser,
+        )
+    elif args.stock:
         # Single-stock mode.
         try:
             articles = fetch_news(args.stock, days=args.days)
