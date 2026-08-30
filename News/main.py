@@ -198,8 +198,11 @@ PAGE_HTML = """<!DOCTYPE html>
     --accent: #38bdf8;
     --accent-2: #22c55e;
     --danger: #f87171;
+    --sidebar-w: 320px;
+    --header-h: 69px;
   }
   * { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
     margin: 0;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -214,15 +217,13 @@ PAGE_HTML = """<!DOCTYPE html>
     background: rgba(15, 23, 42, 0.92);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--border);
-    padding: 16px 24px;
+    padding: 14px 24px;
   }
   .header-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 12px;
-    max-width: 1100px;
-    margin: 0 auto;
   }
   h1 { font-size: 20px; margin: 0; display: flex; align-items: center; gap: 8px; }
   h1 .dot { color: var(--accent); }
@@ -249,38 +250,88 @@ PAGE_HTML = """<!DOCTYPE html>
     cursor: pointer;
   }
   button:disabled { opacity: 0.6; cursor: default; }
-  .meta { max-width: 1100px; margin: 8px auto 0; color: var(--muted); font-size: 13px; }
-  main { max-width: 1100px; margin: 24px auto; padding: 0 24px 64px; }
-  .stock {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 16px;
-    overflow: hidden;
+
+  /* Two-pane master/detail layout */
+  .layout {
+    display: flex;
+    align-items: stretch;
+    height: calc(100vh - var(--header-h));
   }
-  .stock-head {
+  .sidebar {
+    width: var(--sidebar-w);
+    flex: 0 0 var(--sidebar-w);
+    border-right: 1px solid var(--border);
+    background: var(--bg);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-meta {
+    padding: 12px 16px;
+    color: var(--muted);
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 1;
+  }
+  .stock-list { list-style: none; margin: 0; padding: 6px; }
+  .stock-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
     cursor: pointer;
     user-select: none;
   }
-  .stock-head:hover { background: var(--panel-2); }
-  .stock-name { font-weight: 600; font-size: 16px; }
-  .ticker {
-    font-size: 12px;
+  .stock-item:hover { background: var(--panel); }
+  .stock-item.active { background: var(--panel-2); }
+  .stock-item.active .stock-name { color: var(--accent); }
+  .stock-item .stock-name { font-weight: 600; font-size: 14px; }
+  .stock-item .ticker {
+    font-size: 11px;
     color: var(--accent);
     background: rgba(56, 189, 248, 0.12);
-    padding: 2px 8px;
+    padding: 2px 7px;
     border-radius: 999px;
   }
-  .count { color: var(--muted); font-size: 13px; margin-left: auto; }
-  .chevron { color: var(--muted); transition: transform 0.15s; }
-  .stock.collapsed .chevron { transform: rotate(-90deg); }
-  .stock.collapsed .stock-body { display: none; }
-  .stock-body { padding: 4px 18px 14px; }
-  .day-group { margin-top: 12px; }
+  .stock-item .count {
+    color: var(--muted);
+    font-size: 12px;
+    margin-left: auto;
+    background: var(--panel);
+    padding: 1px 8px;
+    border-radius: 999px;
+  }
+  .stock-item.active .count { background: var(--bg); }
+  .stock-item.has-error .stock-name { color: var(--danger); }
+
+  .detail {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 24px 32px 64px;
+  }
+  .detail-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-head .stock-name { font-size: 22px; font-weight: 700; }
+  .detail-head .ticker {
+    font-size: 13px;
+    color: var(--accent);
+    background: rgba(56, 189, 248, 0.12);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .detail-head .count { color: var(--muted); font-size: 14px; margin-left: auto; }
+
+  .day-group { margin-top: 18px; }
   .day-label {
     font-size: 12px;
     text-transform: uppercase;
@@ -290,11 +341,11 @@ PAGE_HTML = """<!DOCTYPE html>
     padding-bottom: 4px;
     margin-bottom: 8px;
   }
-  .article { padding: 6px 0; }
+  .article { padding: 8px 0; }
   .article a {
     color: var(--text);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 15px;
   }
   .article a:hover { color: var(--accent); text-decoration: underline; }
   .article .source { color: var(--muted); font-size: 12px; margin-left: 6px; }
@@ -305,6 +356,15 @@ PAGE_HTML = """<!DOCTYPE html>
     padding: 60px 20px;
     color: var(--muted);
   }
+  .placeholder {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 15px;
+    text-align: center;
+  }
   .spinner {
     width: 28px; height: 28px;
     border: 3px solid var(--border);
@@ -314,6 +374,18 @@ PAGE_HTML = """<!DOCTYPE html>
     animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 720px) {
+    .layout { flex-direction: column; height: auto; }
+    .sidebar {
+      width: 100%;
+      flex-basis: auto;
+      max-height: 40vh;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .detail { padding: 20px; }
+  }
 </style>
 </head>
 <body>
@@ -333,24 +405,35 @@ PAGE_HTML = """<!DOCTYPE html>
       <button id="refresh">Refresh</button>
     </div>
   </div>
-  <div class="meta" id="meta">Loading watchlist news...</div>
 </header>
-<main id="content">
-  <div class="banner"><div class="spinner"></div>Fetching the latest news for your watchlist...</div>
-</main>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-meta" id="meta">Loading watchlist news...</div>
+    <ul class="stock-list" id="stock-list"></ul>
+  </aside>
+  <section class="detail" id="detail">
+    <div class="banner"><div class="spinner"></div>Fetching the latest news for your watchlist...</div>
+  </section>
+</div>
 
 <script>
-const contentEl = document.getElementById('content');
+const listEl = document.getElementById('stock-list');
+const detailEl = document.getElementById('detail');
 const metaEl = document.getElementById('meta');
 const searchEl = document.getElementById('search');
 const daysEl = document.getElementById('days');
 const refreshBtn = document.getElementById('refresh');
 let allData = [];
+let selectedKey = null;
 
 function esc(s) {
   const d = document.createElement('div');
   d.textContent = s == null ? '' : s;
   return d.innerHTML;
+}
+
+function stockKey(stock) {
+  return (stock.ticker || '') + '|' + stock.name;
 }
 
 function groupByDay(articles) {
@@ -367,76 +450,119 @@ function groupByDay(articles) {
   return groups;
 }
 
+// Return the articles for a stock that pass the current headline filter.
+function visibleArticles(stock, q) {
+  if (!q) return stock.articles;
+  const nameMatch = stock.name.toLowerCase().includes(q) ||
+    (stock.ticker && stock.ticker.toLowerCase().includes(q));
+  if (nameMatch) return stock.articles;
+  return stock.articles.filter(a => a.headline.toLowerCase().includes(q) ||
+    (a.source && a.source.toLowerCase().includes(q)));
+}
+
+function renderDetail(stock, q) {
+  if (!stock) {
+    detailEl.innerHTML = '<div class="placeholder">Select a stock on the left to see its news.</div>';
+    return;
+  }
+  const articles = visibleArticles(stock, q);
+  const tickerHtml = stock.ticker ? '<span class="ticker">' + esc(stock.ticker) + '</span>' : '';
+
+  let bodyHtml;
+  if (stock.error) {
+    bodyHtml = '<div class="error">Failed to fetch: ' + esc(stock.error) + '</div>';
+  } else if (articles.length === 0) {
+    bodyHtml = '<div class="empty">No news found' + (q ? ' for this filter.' : '.') + '</div>';
+  } else {
+    bodyHtml = '';
+    for (const g of groupByDay(articles)) {
+      bodyHtml += '<div class="day-group"><div class="day-label">' + esc(g.label) + '</div>';
+      for (const a of g.items) {
+        const src = a.source ? '<span class="source">' + esc(a.source) + '</span>' : '';
+        bodyHtml += '<div class="article"><a href="' + esc(a.link) +
+          '" target="_blank" rel="noopener">' + esc(a.headline) + '</a>' + src + '</div>';
+      }
+      bodyHtml += '</div>';
+    }
+  }
+
+  detailEl.innerHTML =
+    '<div class="detail-head">' +
+      '<span class="stock-name">' + esc(stock.name) + '</span>' +
+      tickerHtml +
+      '<span class="count">' + articles.length + ' article' + (articles.length === 1 ? '' : 's') + '</span>' +
+    '</div>' + bodyHtml;
+  detailEl.scrollTop = 0;
+}
+
 function render() {
   const q = searchEl.value.trim().toLowerCase();
   let totalArticles = 0;
   let shownStocks = 0;
   const frag = document.createDocumentFragment();
+  const visibleStocks = [];
 
   for (const stock of allData) {
     const nameMatch = !q || stock.name.toLowerCase().includes(q) ||
       (stock.ticker && stock.ticker.toLowerCase().includes(q));
-    const articles = q && !nameMatch
-      ? stock.articles.filter(a => a.headline.toLowerCase().includes(q) ||
-          (a.source && a.source.toLowerCase().includes(q)))
-      : stock.articles;
+    const articles = visibleArticles(stock, q);
 
     if (q && !nameMatch && articles.length === 0) continue;
     shownStocks++;
     totalArticles += articles.length;
+    visibleStocks.push(stock);
 
-    const card = document.createElement('div');
-    card.className = 'stock' + (articles.length === 0 ? ' collapsed' : '');
-
-    let bodyHtml = '';
-    if (stock.error) {
-      bodyHtml = '<div class="error">Failed to fetch: ' + esc(stock.error) + '</div>';
-    } else if (articles.length === 0) {
-      bodyHtml = '<div class="empty">No news found.</div>';
-    } else {
-      for (const g of groupByDay(articles)) {
-        bodyHtml += '<div class="day-group"><div class="day-label">' + esc(g.label) + '</div>';
-        for (const a of g.items) {
-          const src = a.source ? '<span class="source">' + esc(a.source) + '</span>' : '';
-          bodyHtml += '<div class="article"><a href="' + esc(a.link) +
-            '" target="_blank" rel="noopener">' + esc(a.headline) + '</a>' + src + '</div>';
-        }
-        bodyHtml += '</div>';
-      }
-    }
+    const key = stockKey(stock);
+    const li = document.createElement('li');
+    li.className = 'stock-item' + (stock.error ? ' has-error' : '') +
+      (key === selectedKey ? ' active' : '');
 
     const tickerHtml = stock.ticker ? '<span class="ticker">' + esc(stock.ticker) + '</span>' : '';
-    card.innerHTML =
-      '<div class="stock-head">' +
-        '<span class="chevron">&#9660;</span>' +
-        '<span class="stock-name">' + esc(stock.name) + '</span>' +
-        tickerHtml +
-        '<span class="count">' + articles.length + ' article' + (articles.length === 1 ? '' : 's') + '</span>' +
-      '</div>' +
-      '<div class="stock-body">' + bodyHtml + '</div>';
+    li.innerHTML =
+      '<span class="stock-name">' + esc(stock.name) + '</span>' +
+      tickerHtml +
+      '<span class="count">' + articles.length + '</span>';
 
-    card.querySelector('.stock-head').addEventListener('click', () => {
-      card.classList.toggle('collapsed');
+    li.addEventListener('click', () => {
+      selectedKey = key;
+      for (const el of listEl.querySelectorAll('.stock-item')) el.classList.remove('active');
+      li.classList.add('active');
+      renderDetail(stock, searchEl.value.trim().toLowerCase());
     });
-    frag.appendChild(card);
+    frag.appendChild(li);
   }
 
-  contentEl.innerHTML = '';
-  if (shownStocks === 0) {
-    contentEl.innerHTML = '<div class="banner">No stocks match your filter.</div>';
-  } else {
-    contentEl.appendChild(frag);
-  }
+  listEl.innerHTML = '';
+  listEl.appendChild(frag);
+
   metaEl.textContent = shownStocks + ' stock' + (shownStocks === 1 ? '' : 's') +
     ' · ' + totalArticles + ' article' + (totalArticles === 1 ? '' : 's') +
-    ' · updated ' + new Date().toLocaleTimeString();
+    ' · ' + new Date().toLocaleTimeString();
+
+  if (shownStocks === 0) {
+    listEl.innerHTML = '<li class="banner">No stocks match your filter.</li>';
+    selectedKey = null;
+    renderDetail(null, q);
+    return;
+  }
+
+  // Keep the current selection if it's still visible; otherwise select the first.
+  let selected = visibleStocks.find(s => stockKey(s) === selectedKey);
+  if (!selected) {
+    selected = visibleStocks[0];
+    selectedKey = stockKey(selected);
+    for (const el of listEl.querySelectorAll('.stock-item')) el.classList.remove('active');
+    listEl.querySelector('.stock-item').classList.add('active');
+  }
+  renderDetail(selected, q);
 }
 
 async function load() {
   refreshBtn.disabled = true;
-  contentEl.innerHTML =
-    '<div class="banner"><div class="spinner"></div>Fetching the latest news for your watchlist...</div>';
+  listEl.innerHTML = '';
   metaEl.textContent = 'Loading watchlist news...';
+  detailEl.innerHTML =
+    '<div class="banner"><div class="spinner"></div>Fetching the latest news for your watchlist...</div>';
   try {
     const days = daysEl.value;
     const url = '/api/news' + (days ? ('?days=' + encodeURIComponent(days)) : '');
@@ -446,8 +572,8 @@ async function load() {
     allData = data.stocks || [];
     render();
   } catch (e) {
-    contentEl.innerHTML = '<div class="banner error">Could not load news: ' + esc(e.message) + '</div>';
     metaEl.textContent = 'Error';
+    detailEl.innerHTML = '<div class="banner error">Could not load news: ' + esc(e.message) + '</div>';
   } finally {
     refreshBtn.disabled = false;
   }
