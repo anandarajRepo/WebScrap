@@ -30,13 +30,13 @@ It is designed to run every 30 minutes on **GitHub Actions**.
 | --- | --- |
 | `fetch_news.py` | Main agent: fetch, filter, dedupe, store, notify. |
 | `telegram_notify.py` | Telegram sending helper (batching, HTML formatting). |
-| `watchlist.json` | Tickers / company names / aliases to track. |
+| `../resources/watchlist.json` | Tickers / company names / aliases to track (shared, at the repo root). |
 | `requirements.txt` | Python dependencies. |
 | `seen_urls.json` | Persisted dedup state (committed by the workflow). |
 | `data/` | Per-day output JSON files. |
 | `../.github/workflows/fetch-news.yml` | Scheduled GitHub Actions workflow (lives at the repo root). |
 
-## Configuration — `watchlist.json`
+## Configuration — `../resources/watchlist.json`
 
 ```json
 {
