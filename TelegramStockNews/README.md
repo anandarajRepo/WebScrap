@@ -100,7 +100,7 @@ The workflow also needs write access to push data back; it uses the built-in
 ## Running locally
 
 ```bash
-cd FavouriteStockNews
+cd TelegramStockNews
 pip install -r requirements.txt
 
 export TELEGRAM_BOT_TOKEN="123456789:AA..."

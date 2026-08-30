@@ -1,6 +1,6 @@
 name: Fetch Stock News
 
-# Runs the FavouriteStockNews agent on a schedule, commits any new data,
+# Runs the TelegramStockNews agent on a schedule, commits any new data,
 # and pushes real-time alerts to Telegram.
 
 on:
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: FavouriteStockNews
+        working-directory: TelegramStockNews
     steps:
       - name: Checkout
         uses: actions/checkout@v4
