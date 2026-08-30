@@ -35,7 +35,9 @@ logger = logging.getLogger("fetch_news")
 
 # --- Paths -----------------------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-WATCHLIST_PATH = os.path.join(BASE_DIR, "watchlist.json")
+# Shared watchlist lives at the repo root under resources/
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
+WATCHLIST_PATH = os.path.join(PROJECT_ROOT, "resources", "watchlist.json")
 SEEN_URLS_PATH = os.path.join(BASE_DIR, "seen_urls.json")
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
