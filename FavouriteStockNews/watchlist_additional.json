@@ -1,0 +1,124 @@
+{
+  "tickers": [
+    {
+      "ticker": "JNPR",
+      "name": "Juniper Green Energy",
+      "aliases": ["Juniper Green Energy", "Juniper Green", "JNPR", "Juniper Green Energy Ltd"]
+    },
+    {
+      "ticker": "NUVAMA",
+      "name": "Nuvama Wealth Management",
+      "aliases": ["Nuvama Wealth Management", "Nuvama", "Nuvama Wealth", "NUVAMA", "Edelweiss Wealth Management"]
+    },
+    {
+      "ticker": "ORIENTPPR",
+      "name": "Orient Paper & Industries",
+      "aliases": ["Orient Paper & Industries", "Orient Paper", "Orient Paper and Industries", "ORIENTPPR"]
+    },
+    {
+      "ticker": "VIDYAWIRES",
+      "name": "Vidya Wires",
+      "aliases": ["Vidya Wires", "Vidya Wires Ltd", "VIDYAWIRES"]
+    },
+    {
+      "ticker": "TINNARUBR",
+      "name": "Tinna Rubber and Infrastructure",
+      "aliases": ["Tinna Rubber and Infrastructure", "Tinna Rubber", "Tinna", "TINNARUBR"]
+    },
+    {
+      "ticker": "KCPSUGIND",
+      "name": "KCP Sugar & Industries",
+      "aliases": ["KCP Sugar & Industries", "KCP Sugar", "KCP Sugar and Industries", "KCPSUGIND"]
+    },
+    {
+      "ticker": "TEMBO",
+      "name": "Tembo Global Industries",
+      "aliases": ["Tembo Global Industries", "Tembo Global", "Tembo", "TEMBO", "Saketh Exim"]
+    },
+    {
+      "ticker": "ABREL",
+      "name": "Aditya Birla Real Estate",
+      "aliases": ["Aditya Birla Real Estate", "ABREL", "Century Textiles", "Century Textiles and Industries", "Aditya Birla Real Estate Ltd"]
+    },
+    {
+      "ticker": "ADORWELD",
+      "name": "Ador Welding",
+      "aliases": ["Ador Welding", "Ador", "ADORWELD", "Ador Welding Ltd"]
+    },
+    {
+      "ticker": "LESL",
+      "name": "Leapfrog Engineering Services",
+      "aliases": ["Leapfrog Engineering Services", "Leapfrog Engineering", "Leapfrog", "LESL"]
+    },
+    {
+      "ticker": "AEQUS",
+      "name": "Aequs",
+      "aliases": ["Aequs", "Aequs Ltd", "Aequs Limited", "AEQUS"]
+    },
+    {
+      "ticker": "RUSTOMJEE",
+      "name": "Keystone Realtors",
+      "aliases": ["Keystone Realtors", "Rustomjee", "Keystone", "RUSTOMJEE", "Keystone Realtors Ltd"]
+    },
+    {
+      "ticker": "LANDMARK",
+      "name": "Landmark Cars",
+      "aliases": ["Landmark Cars", "Landmark", "LANDMARK", "Landmark Cars Ltd"]
+    },
+    {
+      "ticker": "RAJSREESUG",
+      "name": "Rajshree Sugars & Chemicals",
+      "aliases": ["Rajshree Sugars & Chemicals", "Rajshree Sugars", "Rajshree Sugars and Chemicals", "RAJSREESUG"]
+    },
+    {
+      "ticker": "DAMCAPITAL",
+      "name": "DAM Capital Advisors",
+      "aliases": ["DAM Capital Advisors", "DAM Capital", "DAMCAPITAL", "DAM Capital Advisors Ltd"]
+    },
+    {
+      "ticker": "AXISCADES",
+      "name": "Axiscades Engineering Technologies",
+      "aliases": ["Axiscades Engineering Technologies", "Axiscades", "AXISCADES", "Axiscades Technologies"]
+    },
+    {
+      "ticker": "ECORECO",
+      "name": "Eco Recycling",
+      "aliases": ["Eco Recycling", "Ecoreco", "ECORECO", "Eco Recycling Ltd"]
+    },
+    {
+      "ticker": "RETAGGIO",
+      "name": "Retaggio Industries",
+      "aliases": ["Retaggio Industries", "Retaggio", "RETAGGIO", "Retaggio Industries Ltd"]
+    },
+    {
+      "ticker": "STLNETWORK",
+      "name": "STL Networks",
+      "aliases": ["STL Networks", "STL Networks Ltd", "STLNETWORK", "STLN"]
+    },
+    {
+      "ticker": "STLTECH",
+      "name": "Sterlite Technologies",
+      "aliases": ["Sterlite Technologies", "Sterlite Tech", "STL", "STLTECH", "Sterlite Technologies Ltd"]
+    },
+    {
+      "ticker": "SKYGOLD",
+      "name": "Sky Gold And Diamonds",
+      "aliases": ["Sky Gold And Diamonds", "Sky Gold", "SKYGOLD", "Sky Gold and Diamonds Ltd"]
+    },
+    {
+      "ticker": "PRAJIND",
+      "name": "Praj Industries",
+      "aliases": ["Praj Industries", "Praj", "PRAJIND", "Praj Industries Ltd"]
+    },
+    {
+      "ticker": "AEROFLEX",
+      "name": "Aeroflex Industries",
+      "aliases": ["Aeroflex Industries", "Aeroflex", "AEROFLEX", "Aeroflex Industries Ltd"]
+    },
+    {
+      "ticker": "TAC",
+      "name": "TAC Infosec",
+      "aliases": ["TAC Infosec", "TAC", "TAC Infosec Ltd", "TAC Security"]
+    }
+  ]
+}
