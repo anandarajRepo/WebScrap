@@ -3,7 +3,7 @@
 A Python agent that fetches news for a configurable watchlist of NSE stock
 tickers / company names (e.g. `RELIANCE`, `TCS`, `INFY`), saves matched
 articles as raw JSON in this repo, and pushes real-time alerts to Telegram.
-It is designed to run every 30 minutes on **GitHub Actions**.
+It is designed to run every 3 hours on **GitHub Actions**.
 
 ## What it does
 
@@ -115,6 +115,6 @@ just skips (and logs) the alerts.
 
 ## Schedule
 
-The workflow runs every 30 minutes (`*/30 * * * *`, UTC) and can also be
+The workflow runs every 3 hours (`7 */3 * * *`, UTC) and can also be
 triggered manually from the **Actions** tab. GitHub cron runs are
 best-effort and may be delayed during high load.
