@@ -5,11 +5,11 @@ name: Fetch Stock News
 
 on:
   schedule:
-    # Every 30 minutes, at :07 and :37 past the hour. GitHub's scheduler
-    # drops runs during peak load, and the top of the hour (:00 / :30) is
-    # the most contended slot, so offset, non-round minutes get skipped
-    # less often. Schedules are in UTC and remain best-effort, not exact.
-    - cron: "7,37 * * * *"
+    # Every 3 hours, at :07 past the hour. GitHub's scheduler drops runs
+    # during peak load, and the top of the hour (:00) is the most contended
+    # slot, so an offset, non-round minute gets skipped less often.
+    # Schedules are in UTC and remain best-effort, not exact.
+    - cron: "7 */3 * * *"
   workflow_dispatch: {}   # allow manual runs from the Actions tab
 
 # Allow the workflow to commit and push data back to the repo.
