@@ -1,10 +1,16 @@
 """Stock news fetch agent.
 
 Pulls news from free RSS feeds (Economic Times Markets, MoneyControl,
-Business Standard) plus, optionally, the NewsAPI free tier. Filters
-articles against a configurable watchlist of NSE tickers/company names,
-dedupes against previously seen articles, saves matched articles to a
-per-day JSON file, and pushes real-time alerts to Telegram.
+Business Standard) and a per-stock Google News RSS search, plus,
+optionally, the NewsAPI free tier. Filters articles against a configurable
+watchlist of NSE tickers/company names, dedupes against previously seen
+articles, saves matched articles to a per-day JSON file, and pushes
+real-time alerts to Telegram.
+
+The Google News source mirrors ``News/main.py``: it runs a targeted search
+for every watchlist stock, so small/mid-cap tickers that never surface in
+the general market feeds are still picked up. This is what makes coverage
+comparable to ``News/main.py``.
 
 Designed to run on a schedule via GitHub Actions on stateless runners, so
 dedup state is persisted to ``seen_urls.json`` committed back to the repo.
@@ -21,6 +27,7 @@ import json
 import logging
 import os
 import re
+from urllib.parse import quote_plus
 
 import feedparser
 import requests
@@ -53,6 +60,12 @@ RSS_FEEDS = [
     ("Business Standard Markets",
      "https://www.business-standard.com/rss/markets-106.rss"),
 ]
+
+# Per-stock Google News RSS search (no API key required). Mirrors the query
+# used by News/main.py so this agent achieves comparable coverage.
+GOOGLE_NEWS_RSS = (
+    "https://news.google.com/rss/search?q={query}&hl=en-IN&gl=IN&ceid=IN:en"
+)
 
 # Cap so a large first run doesn't send hundreds of Telegram messages.
 MAX_ALERTS_PER_RUN = 30
@@ -199,6 +212,65 @@ def fetch_rss_articles():
     return articles
 
 
+def fetch_google_news_articles(tickers):
+    """Fetch per-stock news from Google News RSS search.
+
+    Mirrors the ``News/main.py`` approach: for every watchlist stock, run a
+    targeted Google News search (``"<name>" stock``) so small/mid-cap
+    tickers that never surface in the general market feeds are still picked
+    up. This is the main driver of coverage parity with ``News/main.py``.
+
+    Each returned article is pre-tagged with the ticker it was searched for
+    (via ``matched_ticker``), so it does not need to pass the generic alias
+    matcher used for the broad market feeds. Never raises on a single
+    stock's failure.
+    """
+    articles = []
+    for entry in tickers:
+        ticker = entry.get("ticker", "").strip()
+        # Use the company name for the query; fall back to the ticker symbol.
+        stock = (entry.get("name") or ticker or "").strip()
+        if not stock:
+            continue
+        query = quote_plus(f'"{stock}" stock')
+        url = GOOGLE_NEWS_RSS.format(query=query)
+        try:
+            logger.info("Fetching Google News: %s", stock)
+            resp = requests.get(url, headers=REQUEST_HEADERS, timeout=30)
+            resp.raise_for_status()
+            feed = feedparser.parse(resp.content)
+            if feed.bozo:
+                logger.warning("Google News feed for %s reported a parse "
+                               "warning: %s", stock, feed.bozo_exception)
+            for item in feed.entries:
+                title = (item.get("title") or "").strip()
+                if not title:
+                    continue
+                # Google News wraps the originating outlet in a <source> tag.
+                source_name = "Google News"
+                src = item.get("source")
+                src_title = None
+                if isinstance(src, dict):
+                    src_title = src.get("title")
+                elif isinstance(src, str):
+                    src_title = src
+                if src_title:
+                    source_name = f"Google News/{src_title.strip()}"
+                articles.append({
+                    "title": title,
+                    "source": source_name,
+                    "url": (item.get("link") or "").strip(),
+                    "published_date": parse_published(item),
+                    "summary": (item.get("summary") or "").strip(),
+                    "matched_ticker": ticker,
+                })
+            logger.info("  -> %d entries", len(feed.entries))
+        except (requests.RequestException, Exception) as exc:  # noqa: BLE001
+            # Deliberately broad: one bad stock query must not sink the run.
+            logger.error("Failed to fetch Google News for %s: %s", stock, exc)
+    return articles
+
+
 def fetch_newsapi_articles(tickers):
     """Fetch articles from NewsAPI free tier if NEWSAPI_KEY is set.
 
@@ -297,6 +369,7 @@ def run():
     initial_seen_count = len(seen)
 
     raw_articles = fetch_rss_articles()
+    raw_articles.extend(fetch_google_news_articles(tickers))
     raw_articles.extend(fetch_newsapi_articles(tickers))
     logger.info("Collected %d raw article(s) from all sources.",
                 len(raw_articles))
@@ -310,9 +383,13 @@ def run():
         if key in seen:
             continue
 
-        # Match against title + summary for better recall.
-        haystack = f"{art['title']} {art.get('summary', '')}"
-        ticker = match_ticker(haystack, matchers)
+        # Sources that already know which stock they searched for (e.g. the
+        # per-stock Google News search) pre-tag the article. Otherwise match
+        # the broad feeds against title + summary for better recall.
+        ticker = art.get("matched_ticker")
+        if not ticker:
+            haystack = f"{art['title']} {art.get('summary', '')}"
+            ticker = match_ticker(haystack, matchers)
         if not ticker:
             # Not on the watchlist; do NOT mark as seen (a later run with an
             # expanded watchlist should still be able to pick it up).
