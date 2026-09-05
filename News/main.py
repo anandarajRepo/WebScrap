@@ -19,6 +19,7 @@ Usage:
 import argparse
 import json
 import os
+import re
 import sys
 import threading
 import webbrowser
@@ -37,6 +38,58 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 # Path to the shared watchlist: <repo root>/resources/watchlist.json
 _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_WATCHLIST = os.path.join(_PROJECT_ROOT, "resources", "watchlist.json")
+
+# ---------------------------------------------------------------------------
+# Headline classification
+# ---------------------------------------------------------------------------
+# Each article is tagged with zero or more of these labels based on keyword
+# patterns in its headline. The feed only exposes the headline (no body text),
+# so this is a lightweight heuristic rather than a full text classifier.
+# Patterns are matched case-insensitively; \b guards keep short words from
+# matching inside unrelated ones (e.g. "buy" won't match "buyback").
+LABEL_PATTERNS = {
+    "Earnings": [
+        r"\bearnings?\b", r"\bresults?\b", r"\bq[1-4]\b", r"\bq[1-4]fy\d{2}\b",
+        r"\bh[12]fy\d{2}\b", r"\bnet profit\b", r"\bprofit\b", r"\brevenue\b",
+        r"\bpat\b", r"\bebitda\b", r"\btopline\b", r"\bbottomline\b",
+        r"\byoy\b", r"\bqoq\b", r"\bquarterly\b", r"\bfinancial results?\b",
+        r"\bmargins?\b", r"\bnet (?:loss|income)\b",
+    ],
+    "Order Win": [
+        r"\border[s]?\b", r"\bcontract[s]?\b", r"\bbags?\b", r"\bwins?\b",
+        r"\bsecures?\b", r"\bawarded\b", r"\bbagged\b", r"\bwon\b",
+        r"\bletter of (?:award|intent)\b", r"\bloa\b", r"\bwork order\b",
+        r"\bpurchase order\b", r"\btender\b",
+    ],
+    "Price Target": [
+        r"\bprice target\b", r"\btarget price\b", r"\btarget of\b",
+        r"\bupgrade[sd]?\b", r"\bdowngrade[sd]?\b", r"\brating\b",
+        r"\bbrokerage\b", r"\boutperform\b", r"\b(?:over|under)weight\b",
+        r"\bbuy\b", r"\bsell\b", r"\baccumulate\b", r"\breiterate[sd]?\b",
+        r"\bmaintains?\b", r"\bre-?rating\b",
+    ],
+}
+
+# Precompile one combined regex per label for speed.
+_COMPILED_LABEL_PATTERNS = {
+    label: re.compile("|".join(patterns), re.IGNORECASE)
+    for label, patterns in LABEL_PATTERNS.items()
+}
+
+
+def classify_headline(headline):
+    """Return a list of category labels that match the given headline.
+
+    Labels come from ``LABEL_PATTERNS``: "Earnings", "Order Win", "Price Target".
+    An empty list means no category matched.
+    """
+    if not headline:
+        return []
+    return [
+        label
+        for label, pattern in _COMPILED_LABEL_PATTERNS.items()
+        if pattern.search(headline)
+    ]
 
 
 def load_watchlist(path=DEFAULT_WATCHLIST):
@@ -80,6 +133,7 @@ def fetch_news(stock, days=None):
             "headline": title,
             "link": link,
             "source": source,
+            "labels": classify_headline(title),
         })
 
     articles.sort(key=lambda a: a["date"] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
@@ -99,7 +153,8 @@ def print_news(stock, articles):
             current_day = day
             print(f"\n📅 {day}\n" + "-" * 60)
         source = f" — {article['source']}" if article["source"] else ""
-        print(f"• {article['headline']}{source}")
+        labels = f"  [{', '.join(article['labels'])}]" if article.get("labels") else ""
+        print(f"• {article['headline']}{source}{labels}")
         print(f"  {article['link']}")
 
 
@@ -145,6 +200,7 @@ def _article_to_json(article):
         "headline": article["headline"],
         "link": article["link"],
         "source": article["source"],
+        "labels": article.get("labels", []),
         "date": pub_date.isoformat() if pub_date else None,
         "date_label": pub_date.strftime("%d %b %Y (%A)") if pub_date else "Unknown date",
     }
@@ -349,6 +405,19 @@ PAGE_HTML = """<!DOCTYPE html>
   }
   .article a:hover { color: var(--accent); text-decoration: underline; }
   .article .source { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .labels { display: inline-flex; flex-wrap: wrap; gap: 5px; margin-left: 8px; vertical-align: middle; }
+  .label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 2px 7px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .label-earnings { color: #bbf7d0; background: rgba(34, 197, 94, 0.16); }
+  .label-order-win { color: #bae6fd; background: rgba(56, 189, 248, 0.16); }
+  .label-price-target { color: #fed7aa; background: rgba(251, 146, 60, 0.18); }
   .empty { color: var(--muted); font-size: 14px; padding: 8px 0; }
   .error { color: var(--danger); font-size: 14px; padding: 8px 0; }
   .banner {
@@ -436,6 +505,14 @@ function stockKey(stock) {
   return (stock.ticker || '') + '|' + stock.name;
 }
 
+function labelsHtml(labels) {
+  if (!labels || !labels.length) return '';
+  const cls = { 'Earnings': 'label-earnings', 'Order Win': 'label-order-win', 'Price Target': 'label-price-target' };
+  const chips = labels.map(l =>
+    '<span class="label ' + (cls[l] || '') + '">' + esc(l) + '</span>').join('');
+  return '<span class="labels">' + chips + '</span>';
+}
+
 function groupByDay(articles) {
   const groups = [];
   const index = {};
@@ -480,7 +557,8 @@ function renderDetail(stock, q) {
       for (const a of g.items) {
         const src = a.source ? '<span class="source">' + esc(a.source) + '</span>' : '';
         bodyHtml += '<div class="article"><a href="' + esc(a.link) +
-          '" target="_blank" rel="noopener">' + esc(a.headline) + '</a>' + src + '</div>';
+          '" target="_blank" rel="noopener">' + esc(a.headline) + '</a>' + src +
+          labelsHtml(a.labels) + '</div>';
       }
       bodyHtml += '</div>';
     }
