@@ -102,5 +102,245 @@
     "published_date": "2025-07-30T19:38:59+00:00",
     "matched_ticker": "TAC",
     "fetch_timestamp": "2026-09-10T04:32:59.582501+00:00"
+  },
+  {
+    "title": "Coforge shares rise 2% as Nuvama, other brokerages say concerns around Chairman's resignation are overdone",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/coforge-shares-rise-2-as-nuvama-other-brokerages-say-concerns-around-chairmans-resignation-are-overdone/articleshow/133994829.cms",
+    "published_date": "2026-09-10T05:32:27+00:00",
+    "matched_ticker": "NUVAMA",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Nuvama says 'Buy' Marico; check 12-month price target, stock performance, shareholding pattern - Livemint",
+    "source": "Google News/Livemint",
+    "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxPX0x6bE5wbnBmLWN0Q2VLMWNJTzZ2d2VPVEE1aElEdmdteHYzTHlzLU9CZGlCSmluejloeS1jLVVKOUtrc3N2S3dPbHBKWVZPRDRDMXdSSTZtWmplTklIVW9sbWxNSllUVUgwZGhnNWlOeDhTNXhKdHN6clZCUmZxenN1WU5LRndOekl3SWpIdk9ubTNaV1YzY2MzSDN2cG9UU2xyeGNva1FmbERVcXRrc3pkNjZINk5uRURYV05FRU1lc0k0eUNObVVla1RZenAtTGNfMFJXRDZSa2dlU1dRb2ktcWdTa2djM1dUT0JDMkfSAfYBQVVfeXFMTjBDVm9fYlJYaENReHYtRmxTM19aSXY1ckQzVF9JRV83dXREaEF3cTRBb2p2QlhKZTZleUJsaTZBTDdxRUZwR1M4Vll0WVlrVE5DZ1VCd1AzRFNTLXA1QjFuZGRGbHd4VDZxRUZGaGVXRmI1dWlGWUtVeWdPeE5RZEwzN2hKWkFRdmlOZ0pmNG9DaExzZVc4cTJJd1NtTGpmbVR6Smh6Nko3V3dXX2YyMERjOHJILVI4bV8zWDUtMTN5VVNzdkphaVQ1dmxrY2g2MDZISTB0VEU0MW9zdjltdlFpQzl4eHpTV2pIMmluTVgtZTJrODN3?oc=5",
+    "published_date": "2026-09-10T09:21:50+00:00",
+    "matched_ticker": "NUVAMA",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Cella Space Limited and Nuvama Wealth Management Limited Report Q3 FY26 Financial Results - scanx.trade",
+    "source": "Google News/scanx.trade",
+    "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxPZU5qZFhWbVJOVWctQWF1bzdzb2ZndE9jWXRrczE4SFp1ZkxxM1R0MG1nRTZhN3ByZmdNQktkVTJqZktIUC1GS1hqd0lzUzl3RG9ucDlHTlFoWGk1dzhzZnMwTFJMRkpHS0o3YjVhTlRCQzdRZzBYaDVFSTNKS3Fmdkx6TzdjeGlNMVhEV0szcWtjRmsyUDJRR2Myb0EzUzBBMVdNQTQ3b2JYLUl3NGtkYmRHalNRNXNiWkk5OXNVTGpCOGxraGtxSURVNTdMZ1lVb0w5WlM1RWJiTllrcWc?oc=5",
+    "published_date": "2026-01-24T08:00:00+00:00",
+    "matched_ticker": "NUVAMA",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Orient Paper & Industries (NSE: ORIENTPPR): 4 Things to Watch - Kalkine India",
+    "source": "Google News/Kalkine India",
+    "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxPTGx2N2JBQXNFelczRVU5RmFURHc4UW80Z1gyNEgwSU5lbkpjV1RTVDBZYjFWbkl4VDNGSnU5c0ZIN21PSUYxUE5qOVZqZnp4X1p6OEdpRjBXb2hPbkdjY053QzgzbV85N0Q2dWdFNEtxR2dFYzRWbmNJUDJTWDFGcGp2Y1VYYjNxeDhsY0dkT255ZDllYXBiVnAwR0Z3ZGkycGNybURhQUtWa0piV1AyQ3RIVk9xX0l1Uml1b0VZc1ZrekUyZ0FqbURPWGhhV201UG0ycUpCczI3ZXUwc0k2bThucTZ5QkU?oc=5",
+    "published_date": "2026-09-10T08:23:00+00:00",
+    "matched_ticker": "ORIENTPPR",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Orient Paper & Industries Q2 2026 Earnings: Loss Per Share of ₹1.36 Amid Marginal Revenue Growth - siam.in",
+    "source": "Google News/siam.in",
+    "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQV0ZrWVJ1cXpLNGhyS2RteDduS2dJQVRrNWpHRV9IWkhmSW9DR0p3SjU1Z2Nfd2JsS3ZyU0Z4QmNheDVFX2ZkMXE5VnNLR2FWRmowUWpUajdBTk5EM1hfVWU0LUNBbGtaVldveV82OG56LUFRaWRNczBfeTFDWGpxX1NKaEhVVUVGMVVlbzBlOEd3emhVYWF0clJSdVJMX3I5STVmMHVjTGRwRk9mU0J6d2hFWmJ5Q2ZFa0pUdGNuWkt0UDhlUjhLajRuaXIzUQ?oc=5",
+    "published_date": "2026-07-13T07:00:00+00:00",
+    "matched_ticker": "ORIENTPPR",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "SESHAPAPER Stock Price and Chart — NSE:SESHAPAPER - TradingView",
+    "source": "Google News/TradingView",
+    "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9ydFA0eGFIUmhoUEFMZ0Fidk5xWGVsTnNqSnJ5SWxDZmVJdGpYN2ZFTjF5OEJiT3BZV256UHhzRTRESVY2cXB1bXZzZmkwUXJrc2lBckVqc3lNNUszbG81UQ?oc=5",
+    "published_date": "2017-07-26T08:22:12+00:00",
+    "matched_ticker": "ORIENTPPR",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Vidya Wires fixes IPO price band at ₹48-52 a share - The Hindu",
+    "source": "Google News/The Hindu",
+    "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNV2VyMFhtei1tVUwxNkUwaTRsN0ZaRUhxTXpHRmlKcVZkRzE2bmVmaUpGUFp3U1IxbWs3UGdtdjR4aDZnLUtiTmNNNVF0WUhtcXhmbFpvOUI4N1g5WkxKeUs2RHVESU80eF82ekpIZTBUdW0xNkVKRWo5VC11N29KQktrTjF1aWlBSUJ1YTZQMU5hSkFwV1hCaDI3YUVzcGhDQjNNVWRn0gGsAUFVX3lxTE1UVWpHMHBHc01VSVZCRmQ4QTNRN2NrbE9ZVHZVQ0pNWXhDUHZkcnBQUHIwTXdUdHphTzMyTkNBQWF2ZVh5a3I2VHBvSzIzdnpoRzdsWVBvM2JyeE5BcHNIU1FfMmlZZUVpZkQ4MkcwOEd4YzdMdVBnbEM0Y3Vicml4QjA3Yl94dmpUMko2T3JOamZRWGZ5c0IxVUJJNTJTUlVna2ptck9YZndiUlc?oc=5",
+    "published_date": "2025-11-29T08:00:00+00:00",
+    "matched_ticker": "VIDYAWIRES",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Vidya Wires IPO: Issue subscribed 29 times on final day; NII, retail portions see huge demand, GMP signals 11% premium - Livemint",
+    "source": "Google News/Livemint",
+    "url": "https://news.google.com/rss/articles/CBMikAJBVV95cUxOdlVWSjd2dUMwRWdVQU9QOUhUTlZmWHVDb2ZzYzZMT0Q1MEdYUjl5ZE1yMDF1S3Z6SkNwbjRBWGNBemZ4VkFMU0U3MHlMdHk2UDNKSVZLaXQwU1dmZ0F2S3N2Q2hVTXhfNDhDZmNycDl5UHNjQlFVaTJrSGVnU3N4M3BFNXVnY20yTE5zR3NnU2lVOGtlQ01CV3lkMWZJaHliOGlHWFB4cmlkblhEanVmY3k4S19xNzZ4OGVlOFZKbDdDN3EtVC1HN3JpUTlZVlU0WWxqR2hQMTNRQTBtM0ozVnlPck5tVFdPZXlpbDFJQ1Yzc0NJSGFTaHB3NVFFc1I0OE5jSWVwZFZWc1NCUnJWZ9IBlgJBVV95cUxNTE5WR21rcDZrREg0NC1TTTdlTkktaGpZRmVYVlJCbUFVZ0ZOR1l1VjZDN19KNGtpUzFYbWJBbHNhR05OVWwtQVhRQlBpVmRUZTdRb1B3SHp6UndMY082b1Vla1FxX1E2bmNxRXhreTJjUUZtZ005aFNpdlV3SnIwWU1haDNfbExCN2VhUVQwWHBna1hQbkVvODhMRURRSG5ES2tsVVFIMmlDdUVvZnR0M1hJYmFaR3BpYmNuWFQtZVYwdnZaZUUzSjBoZjlnQlBETEFLWk56OFhhOWxpQnRPSTRRMDJQQ1dvV21BWlh5X182MUZRYWlIdE9LQUExUG1DSmNtX0VoU211T25YZWpmVnd1ZDFzQQ?oc=5",
+    "published_date": "2025-12-05T08:00:00+00:00",
+    "matched_ticker": "VIDYAWIRES",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Tinna Rubber schedules virtual investor meet for September 16 - scanx.trade",
+    "source": "Google News/scanx.trade",
+    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPY3N0dW1FM1NwYnlGdTVxRGtZU2huODZNOU1vNjJHQTkwaGFDR09YTjBNalpCeHU4VVNrQUU0Y08yc0JxV0VvbVVQUVhLVkw2VHhHeEVlSWs5bFhzci10MGs3U1J0N01ydlFPTTlPcHZfN1RabUZIUGtYd2h6MUZGdlFLN3dpXzltOVQ5NjZxSWVza0ZDOUpRa1I4bS11Qi1KYW1rVTE0RmJYbTlnZkoydXA5LXc?oc=5",
+    "published_date": "2026-09-10T07:16:04+00:00",
+    "matched_ticker": "TINNARUBR",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Tinna Rubber TINNARUBR GIA Recycling Day Investor Meet Sep 2026 - Kalkine India",
+    "source": "Google News/Kalkine India",
+    "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPcFJkTjBBeVBjbmYyT0lvUFg4T013bUFkWW5sbWNwX3ptMnRrMlhnSl9wd1I2c2RSQ2ZsNm1ueVB2U0k4N0psSzlmSzhIUHNhY0xXbk1ERms1Y01fcUpvaHFMbzFNbHAyOUJEN0E2Z3E4WFB3eWdrOWVFUEZHSzgwSE84b1Bsb0FuMm1meURwMWQ5aTFSWGhURktSNTd4bjhkMUJZeXFkOS13TWs4MXlUX2VWUDBHa0pxZTF3VU5pRFdxMWFIZUhCbXBiQkRBUUhGclZDUEg2MkhqQQ?oc=5",
+    "published_date": "2026-09-10T06:29:00+00:00",
+    "matched_ticker": "TINNARUBR",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Tinna Rubber and Infrastructure Share Price Outlook: Where It Could Be in 3 Years - univest.in",
+    "source": "Google News/univest.in",
+    "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPeVI1V3p5Sk0wdkw1UHpHV21LU3FmMmRScjZfS1RSVlpYT0J1RS1FT3ZEZ25kbTF3dWxWZGJjUzBVRzVob2ZxZFI3UjFhZEE5bDR0blpyS2hRNDBYSDFZazZCejJVbnNjaFFNV0RMRFJ6N0lBaTVJcGRoY2Fqd1hRaXpzbDVZdm1vcjF6d0taVkNRd2M?oc=5",
+    "published_date": "2026-08-04T07:00:00+00:00",
+    "matched_ticker": "TINNARUBR",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Tinna Rubber and Infrastructure Debuts on NSE, Enhancing Investor Accessibility By Investing.com - Investing.com India",
+    "source": "Google News/Investing.com India",
+    "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNdUtYLUNLWkFQcVZlY0VaOXhtc0l3MHY3UjVzdU5HR2kydTNQRFhqcWpOWXphTzFBb2ZRcXJDR1lBVVhkMzBPc3UzdjQ1Qi1hM0s1U2NyMWl0bk5lUEIzc0laSHlIaVc5cDhZNUlMUjFFWE45MkMyQ1FQY0l1dGJIX25xSGdjSVp2OUo4VlNrMDFET2dsZ0E5MFV5VlFtczR0M2JBWDFyYWVweGRLSW85aE1qMmlPQkZsWHBBajdleUhodVo1WDY0TFljVjVJbXM?oc=5",
+    "published_date": "2025-04-17T07:00:00+00:00",
+    "matched_ticker": "TINNARUBR",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "HAL shares: 6 upcoming bonus issues & stock splits to track this month - Corporate Action - The Economic Times",
+    "source": "Google News/The Economic Times",
+    "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxNMDMtbDk2eUFtWHZuSTktR0tZWU55d1BnM194RFV1dXNHYV95S002U3BNZlEwdFpVaHVKVGFaMzVyY2pFOG5UVTVQcWZpSi1FTGVZMWRCY2wxbXNCYmNhTjRpT1B4T3lkWmIwUlJTRW1DMXQyeFBVWDBNRk82X1ZMQ29zZlZyaWdfODVNdTJ5TF9hc2tfSzJKYXBIVUtMRnJ4ZlpZc08wdlQ1Z3hxLWcxUHpDTXZOM1JaRFVLcG5SaEVPZW5PTDdJX1lxNDVlOFlSanhJZUh2Rl9iN2xkWUJ2ZDR4ZzRUZw?oc=5",
+    "published_date": "2023-09-14T07:00:00+00:00",
+    "matched_ticker": "TINNARUBR",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "87 stocks turn multibaggers in resilient Indian market during H1. What's the second half looking like? - The Economic Times",
+    "source": "Google News/The Economic Times",
+    "url": "https://news.google.com/rss/articles/CBMigwJBVV95cUxPbFNNdFB5UTNLbUpHQ2FRN1FjYW5jb2NubEhBZFJTTl95TUI0NmZXdlpGRkNUR0xMV1h0clBxdWZBRkRvaVlCZjdxSXU3ckNJcGlIOFplYndEX3VnbE1IaU05VFg0THd1QzlCMm9rN2VMRTY1ZUx2RjFyX3BqbDFraWt6QUk3SEgwS3E2ZG9seDlTQWZfak1sNllwc2FCUWJFOXNDTUdfUGxpeUJQUDU3UU4xUVIxX1Vra094dTdVNmJKWWNuLUFXYUdaNmN5MEpsNVQtZUtRbFNpcVJBMXN3dDdvbEI4NWctMExNNlVfNFFzSDgydWFCUi04bmgwTFh4YXM40gGIAkFVX3lxTE1oNmo0M3paVXZWY3dxXzhKMm9VbUhfbFlzVUxBdW9oQVlVNG8yVlVxcDlVQmFucF9kMEI2SlRrM1Q1WjRQTEcwaU83dzVnN0JPWGdxdk1QbGxSMXBTTXNMZFh1WnZwMzNUdWs3VE83bXQ2TzdkNXBGcHp6SEdDVHFfMi1oMlJjVHdVdHEydDJuV3EzcDZHeUZBSHV4dngxcjhabVp1REZ6eDhGbmk0aThsQm12TnV1Zk5weHY1TWd1Rkd0NWVyX1QxU3ZGaHprVTBxdzhIZkg4SFQzY0x2amZNV0FKZWQxV3FteE5rS2Jyb0ZQVmVmODRFUGNJd3lxVFFSUUgtd3Zacg?oc=5",
+    "published_date": "2024-06-26T07:00:00+00:00",
+    "matched_ticker": "TINNARUBR",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Tinna Rubber & Infrastructure fixes record date for scheme of arrangement - Business Standard",
+    "source": "Google News/Business Standard",
+    "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPVnhrYTBOSkpxQnBCX2s2dHNGTHl5dDhVZXBFYW5Dam1RUWV1U0hWQWVUQ2d5MC1HRTEyd3hFQ1JsQ1NBRk1zQ2FQVTM3NWZzMjJhNG5zYUo2R0FwVDRLM3FVaUlfbV9oZUlYNy11aDNSSlhVQ2NWekdqWk15T0hsaDk0U0VkUGJtbFVUMHFqYXBCQVEtQmtOd2o2T0lUbTZQNjFzS3VqN01SZXFsWm5wUTFkY0NHMEFBNFBlWHc0SjJpUTZfQldLcjRwU2ZqYVc2UzBWaTRGb1rSAd4BQVVfeXFMTVVvN2tBME9mUGgydmFEdTB3aDNFTENkMUJfQmc5RGVrUnRTODFrNVFMdkhIZVhIQkhrdzF4VmJiOGlTc2FIQm54OUdLQ2Z2QU81X2lrcGctcUxWQ0o2S3J6dkFtNlhwRnBiT1NQR1V5ZmNYWVVKZXJDWFBwVWg0LTdGVXByLXhCMWxpb2NLdW1qTWkzenRiWkFEUGpRRnQ1RWpEVTFpbFRORUEyeFFXNFpVNmpNUmhrU1NZYTBTRlNydTR2OFpxeGxhbHpYTUxNTnYtenY2NktfVS0wM0Z3?oc=5",
+    "published_date": "2018-02-08T08:00:00+00:00",
+    "matched_ticker": "TINNARUBR",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Tembo Global Industries Limited: Shareholders Board Members Managers and Company Profile | INE869Y01028 - marketscreener.com",
+    "source": "Google News/marketscreener.com",
+    "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxORkZIWVd0bFFERDdMeWU1aTdFM2ptNGF3M1UwdFdzQXVzSFN0LXBNRDFIYkY5U0ZHSVNndVpKMFBYbHctRk5MRWVGcXdEY1YwQ2FUZjVJRm1udFlkZ2pPc2pFQWdBUXo3dlFJeXQzZUF6bmkzVmV3TlphLU82Z1NsWkxnMzBhZi1aZHVFbVZnZw?oc=5",
+    "published_date": "2020-09-04T15:14:14+00:00",
+    "matched_ticker": "TEMBO",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "IPO News: Citius Transnet’s Rs. 1,105 Cr. InvIT IPO Opens April 17, Mehul Telecom’s Rs. 28 Cr. Issue in Focus - Analytics Insight",
+    "source": "Google News/Analytics Insight",
+    "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOM2FTcEhZampSanRXeDJYWDg1b3F4OF83cFpTMTdjQXdxR05ncmcyVUk5OS04d3JTaVpmZHM0YndhWm0xU19FVklHTXR3Mzd5MS10S0c1amZ0UUstVS0tRWNyR29tT3hKOUZzT2w2RUFEUGFkNlpEMHpWZHFON2VYZ05LWWxyeXpEOGpxeElpdEUtN3dpYjMtRHJ4T3l4OGZjQlg5WkdYU1czQVE4a3lSUk5xU0p6QjRvTlpxNXp4aHFnQmFzbUE5eXR5WjJyUkxxX0Vv0gHgAUFVX3lxTE1hMDNWeXg3cjQtYjFJRUdVbEd5QU5jOVg3S2xJVWFuQXZ1OHhFNlAtY1RPSUFvNTROTi1kS01mR3hhLU1kNWczWHE1aURBRlJTNzRDWEhNUXZlT1NVVnQ0eEhaYnhTRjh1TTNLNWZyNU1uMWtPMUFYMFlpX3J2WUJXeXAyRW44SjJiX25aTEhUbVM4MkJ0U3FVZ055NjhOY25FcXdINllBdXl4REZtVzd6cl8xVnJ0V1RTVUU0Q2xtQjFIaHh1bjlBYW9fdTBnaDFfUC1sRElpZUZkOURqNWp3?oc=5",
+    "published_date": "2026-04-13T07:00:00+00:00",
+    "matched_ticker": "LESL",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Aequs Ltd Shareholding Pattern – Promoters, FIIs & DIIs - Value Research",
+    "source": "Google News/Value Research",
+    "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTFAzVERIdkFXWW1BUXpDZGNvUzZfRS1MQ0xUMHRJVHZwR3otT3BKYXhJODFhYWNENGpZNTNUMUV5Wnc1WFAzWHdwei1YNmZhSU9idVZjRktmcXF3NDI2TjdYQWlBZGdwa1QxZDN6UG52SjZnZVhCS3lGaG1FRWJPUQ?oc=5",
+    "published_date": "2026-08-30T13:51:29+00:00",
+    "matched_ticker": "AEQUS",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "AEQUS Share Price Today - Aequs Stock Analysis - Equitypandit",
+    "source": "Google News/Equitypandit",
+    "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBfWTdIQWFPbXRCZTN1S0hJQzQ3STFpZFFWeVluWWJKS3JNS2ZMdjRGakVZWDdaWDBORk9yQWY0eHNoYmhQaEdpeEVVYkEyOFk4ckRoLXJja21BQQ?oc=5",
+    "published_date": "2025-12-10T08:06:35+00:00",
+    "matched_ticker": "AEQUS",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Keystone Realtors Share Price Target 2026: Rs 460 Analyst Forecast - univest.in",
+    "source": "Google News/univest.in",
+    "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE80ZGw4d2tnUGdQUXotbmhQRW9DejlZNVJyV2Jvd2pDZ01INTU0Vm1zcUJmNWFXVUp4YThiXzR5UkJzejd1Q1hkZ01Cd0JIcFdIMmJzeWtEYnYwaFVIcHJ2blpFbTBZcWZfa2VtMmhRclBfQTZ5?oc=5",
+    "published_date": "2026-06-25T07:00:00+00:00",
+    "matched_ticker": "RUSTOMJEE",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Keystone Realtors Q1 PAT jumps 221% to ₹524 Mn as margins expand - scanx.trade",
+    "source": "Google News/scanx.trade",
+    "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOUHZNQWE0dV8wU3c3dW5ubHJGbzEySXlHZUN6eHdSU0dJQTAyZXhSRExWS29WQTNQd2VJUndGUmY1b3phTnBrS2JNZmMxSld1cjQtNFQyNVJoc2JUREFiTFlLX2tRaEdJZy10eEFUb0o5OXNic1hRcDRzaDZQZGJXbk1fQXpDY3J1NUdrMnl0T3d3cHV2OVotYWNYdGRtQUxvWEI4aUl4WXRHeHkwdXZGbQ?oc=5",
+    "published_date": "2026-08-04T07:54:36+00:00",
+    "matched_ticker": "RUSTOMJEE",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Keystone Realtors (RUSTOMJEE.NS) Holds Steady Near Support Amid Modest Decline - Anchored VWAP - vinanet.vn",
+    "source": "Google News/vinanet.vn",
+    "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQUU9pSHdjekV3RzNZblNjb296bzNPRkVsVkZuOVl1RXJFZUdieWRuLUtkNEhDSldPbjVZMTlnaVRHOE9QUDFRWlBhV25ZQkNEVUpuRFNRZXhRd1hwbmhuVnNTdldYeTVGM3kxUTFaWjRKSUFjajl0Z3d6Mm9kdEt5V0xjYm1CdVY3OFI5WUduUXQ2V2lfcmhFN0xjWGdmTHVVMXh2MzNPU1hvdGx4Z1lJVlhySVNCbzRI?oc=5",
+    "published_date": "2026-06-01T07:00:00+00:00",
+    "matched_ticker": "RUSTOMJEE",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Eco Recycling Secures BSE Nod For 3,00,000 Promoter Warrants At ₹411 Each - Sahi",
+    "source": "Google News/Sahi",
+    "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOWTlFZlB4eEhsM2NlMUpkRlgwU2FWNm80RElBUEVJcEVpX2NQbW5KYmFsaGg0Ymp4bnFWNmYxTHEwVVVsZjFKOWVoNU4zbmlBNUw3b1Nhcy10ZXJrQUZHWFR1bXEyYmRCYTRnT0xGV3p5cXdoX0FqQnZMZzFqbFltT2JCbktodk9hMTRPVHJFbjFjX2d3VEpYaFlsZ1FhWS1LQkdnanhacUxOVjNMNk8yLQ?oc=5",
+    "published_date": "2026-06-09T07:00:00+00:00",
+    "matched_ticker": "ECORECO",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "STL Networks Share Price Today - STL Networks Ltd. Stock Price Live NSE/BSE - HDFC Sky",
+    "source": "Google News/HDFC Sky",
+    "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9iTzBOZE11UkxCUWlxNGJmQlRlM2tJRU8wODV1eFB2SGc0Zm01c0NLa3RjY1BXZV9oTTBUREd5b3NkdVU0QVJXZmFVME5BZS1nQ2dyMmdB?oc=5",
+    "published_date": "2025-09-05T04:23:59+00:00",
+    "matched_ticker": "STLNETWORK",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Invenia – STL Networks lists on NSE and BSE after demerger from Sterlite Technologies - MediaBrief",
+    "source": "Google News/MediaBrief",
+    "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNNzNrOFRoUWxwV05NZWNkQTFQdzdtNkZwaDVMMEdJRzRNazNBX1UxYmIxYkYtdUhwS0pvZ2xJV3RJLU9BbFdsUGNvMHBZT1k5S21CaDB0X0cxSUFReURwNW10SnpESWVsdU9hbGdxWjZHb0RmOFQxRkJvVkhFZXItbEJjeGtRSkpNWHZmaWl6XzJnUmdGRDctSWpZVThIcVEzVjZ6eEdTQ2VfaFnSAbABQVVfeXFMUElQdjlVbllLSTlKbHZ6THZTd0stYVpzSkFyZ2pFV0N5WG5vRng1QmdvenQ0ZzlJRzVrVzJpOWtRZHhZZW1JWmNvX016NTNzMU5fWnppeVFuQUdEeE1CbmE0Y3lCSnhFVlJoRExJY0pfVWtUVU9DUmgxeUxkT3VwSjdQLTVWM2gzTG00bDIyWDA2MXZGNExUZ29NTE16NHVtMjE2b3hfTDlJdV9jWDBVbWQ?oc=5",
+    "published_date": "2025-09-05T07:00:00+00:00",
+    "matched_ticker": "STLNETWORK",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Multibagger Telecom Stock Up 656% in 1 Year: Why It Rallied - univest.in",
+    "source": "Google News/univest.in",
+    "url": "https://news.google.com/rss/articles/CBMivwJBVV95cUxORDM4R2t4M1pPekxIeGZydGxCSVNnbWVZbDZveEVady1peDBKRWtHTWxlYWFVQV9sYmxOU19EZ2h6VUZuQnZpZWlsdXNSeWYyNHRkTU5OY0I2N1FxYlVDeFZzMGNPQWNndDluQVZmZzRXOV9lbmNTd2kxcHVNOU9jVEhyV0ZteTNManhDRDVOOUdkRU81VVNxbHFYeTl5NUtFTEtBaEd3cHNYOFY4cmo0ZV96RDUzX2N1R2s5bk5hUkltMDlKSHNadHd5alRBZ0w5QmJFQjRfVGU1bjlQdEhGVzAxRTFfeUtWcmlHc1JlZDRXek51M0tZV3FvZHhjUzFhSDhRcThOX3BTNnNVMm9wdzllNjBGeFRKdTR5SkdtZ1p4NV9nMkphVTY5QUxScHA2SWZfV1hBc0gxU2lhYU8w?oc=5",
+    "published_date": "2026-09-10T06:49:19+00:00",
+    "matched_ticker": "STLTECH",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Sterlite Technologies Ltd Slips 1.12% - Business Standard",
+    "source": "Google News/Business Standard",
+    "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOWGVRVGJVaENYZnpyWjh4MmxFeGMwdmFXMzVxU0E0azFVRnFqUlNuQWtBZEVtdFNDQzEydVc2Z0FwdkpEeWt0Rk9pbUE5WG5hNXFjX3hlbjhsN2JHd21sY2NmLURFZFhCNno2UjF6RzJGUjVSazdMRmFWanJKbDFjN2VmUzRVOHoyYVI0b3hEaFFRX3FJcnBpS2NDS3BLOUdHQllpN0dMNEc0akJwWEh2YkdHdWNidGhPU0drMUREa9IBvwFBVV95cUxOWGVRVGJVaENYZnpyWjh4MmxFeGMwdmFXMzVxU0E0azFVRnFqUlNuQWtBZEVtdFNDQzEydVc2Z0FwdkpEeWt0Rk9pbUE5WG5hNXFjX3hlbjhsN2JHd21sY2NmLURFZFhCNno2UjF6RzJGUjVSazdMRmFWanJKbDFjN2VmUzRVOHoyYVI0b3hEaFFRX3FJcnBpS2NDS3BLOUdHQllpN0dMNEc0akJwWEh2YkdHdWNidGhPU0drMUREaw?oc=5",
+    "published_date": "2026-09-10T04:35:51+00:00",
+    "matched_ticker": "STLTECH",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Stocks to Watch on Tuesday - Dalal Street Investment Journal",
+    "source": "Google News/Dalal Street Investment Journal",
+    "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNU1paTkY2WllVQnNYd2xWVmx2aVgzd2VHekdDS3g2Z1NzMDhoWmROS0VwOFVadnJIcmhnVU85bjJlMTJsY3R2Tms3TWF2eXNLXzltWDBxQTdERTU0cFBDWkJwX2pBUTFqZW5WRklKcmlGZFBVbmJkZ3B5eG1CM3pzaA?oc=5",
+    "published_date": "2026-08-03T07:00:00+00:00",
+    "matched_ticker": "PRAJIND",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "Aeroflex Industries Share Price hits fresh 52-week high - univest.in",
+    "source": "Google News/univest.in",
+    "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPb3JIaU1VVGdoUjhGQlVmMDR5Z0xPejhOQ0NfaGFoRGtWZnpsV0FOV3FYX3hBdVRrNjVtWHJJNVJ1TEh1Ql9MZ1pZZHhpT2FMQ0czT252aTFyUXZJWGQta1hLVjliQXVMaVdXOTRxRjRSVW1oU2tuLUhmcWlCVzdKdC1PbUpQM2FRY0NHcjB4U0hwUQ?oc=5",
+    "published_date": "2026-09-08T07:00:00+00:00",
+    "matched_ticker": "AEROFLEX",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
+  },
+  {
+    "title": "AEROFLEX Share Price Today - Aeroflex Industries Stock Analysis - Equitypandit",
+    "source": "Google News/Equitypandit",
+    "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1fRVdVdGRFWmFXNTlIcHNBRnpTanh6STVMaWZaVGVFTkEyZldhRmg5QXlqWXg4dndYYzNLVy0wRUlmdUt5WUIwWUdVZ1E1bFNTVzFabGNtclk2cHZidmc?oc=5",
+    "published_date": "2025-10-09T16:25:15+00:00",
+    "matched_ticker": "AEROFLEX",
+    "fetch_timestamp": "2026-09-10T11:11:00.585457+00:00"
   }
 ]
