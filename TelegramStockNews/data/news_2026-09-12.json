@@ -30,5 +30,53 @@
     "published_date": "2026-09-04T07:00:00+00:00",
     "matched_ticker": "ECORECO",
     "fetch_timestamp": "2026-09-12T04:27:24.627234+00:00"
+  },
+  {
+    "title": "BSE volumes ease after sharp rebound; CAS remains in focus: Nuvama",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/bse-volumes-ease-after-sharp-rebound-cas-remains-in-focus-nuvama/articleshow/134115840.cms",
+    "published_date": "2026-09-12T07:33:25+00:00",
+    "matched_ticker": "NUVAMA",
+    "fetch_timestamp": "2026-09-12T10:39:55.277445+00:00"
+  },
+  {
+    "title": "Vidya Wires IPO: Price band set at Rs 48–Rs 52, public issue opens on December 3 - The Economic Times",
+    "source": "Google News/The Economic Times",
+    "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxONWVKcGw1c3BJZlNULXNxSmVVUW1YTE1aXzRmRk41TGtYWXVVYXBHS0VhbTBCbDhETTFNTDdTUXk2dWJWTnE5a09iT3l6NTVKeTlMaV9WTUZJeWNlVnpkR1A4bGxYbUxTaDBoNFZxOTFGbUhqUWhwUV84cHJvWldDMjllYWZMYm5fUExtcjMxV0NNelpjcFhlUzBEanIxWDgzaC1fRklyVmtnTzJua3BuMi11REc1MUdvMlFaRld5UXVGdjlTNFp0OXdEa0lzcEVyZEloU0h3OHVlTTNyUXBSaXZ2b9IB6AFBVV95cUxOcVBZTDJlM3FUTGRsSzhoM085bzNjaTRtSUVBN2wwOXV1Wjh5Y0Y1cTlBZ0F1aGFLemhlbGJNOFJ1UlVwcnpSdGd0aW9ZR01UOFZLSUd5UTZ5SV9xd2lubmYzNk13Vk1UQkgwMGxhdWhCLXFBdXdEOFJySG14YzMydzVoWDZFUTBCWmFBNmRDWklxNGdCWWxGZkhNTjg1TE10QWNOb0l3d2VhSjRpbGZFZ1dzc3N6WENYT3Q5MWtnRmJBcE0xOHRfQnpWVnNneHdoc2dCdDRxZ0RraFhuWkpuMDBTSlJlcGxQ?oc=5",
+    "published_date": "2025-11-28T08:00:00+00:00",
+    "matched_ticker": "VIDYAWIRES",
+    "fetch_timestamp": "2026-09-12T10:39:55.277445+00:00"
+  },
+  {
+    "title": "STL Networks - Concurrent Gainers: 9 smallcap stocks gain for 5 days in a row - The Economic Times",
+    "source": "Google News/The Economic Times",
+    "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxNZ05ubzh1WGpDaXVoTnU3VGluemRDQ2ViMU9JdGhlcXJUN01OeHBuZXhTNjhaa2thS2ZvSlA4cXZwU2ROdEtRaEh3YUVXR1FMWlVHemVLWmV2TUt5VUpIMl81Rzd6OC1saDVGOC02T2JRZ0Z6WHk0Ql9Pd3IzYVowZThYUG5BY2lIQi1jLU1CWUVpNGh2TDdrVlBsNmgwMzlLRldoY3NLQVVaWmJxV3hxbXh2MEc0dmtyLVZXNldBSTU2TDNBdFY3ZVFlZGJlYXVqajI5LXAtdnROcHlaRDRR?oc=5",
+    "published_date": "2026-09-12T06:20:26+00:00",
+    "matched_ticker": "STLNETWORK",
+    "fetch_timestamp": "2026-09-12T10:39:55.277445+00:00"
+  },
+  {
+    "title": "Sterlite Tech, Shakti Pumps and 8 Other Stocks in Which Promoters Bought and Sold Stakes This Week - Trade Brains",
+    "source": "Google News/Trade Brains",
+    "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQLVZ2YVlzUEM1dHo5QjNyTE03QXQyVDJaUFZ1NDQ4YXczTEt3LTFzQkN5LTVBNzZEZjhNUXljckR5eVhISDlZcF9EWnpEVk4xdW15UkQ3TG1XV0dPVkhhVTAxQ1hHcFZDZGZiQkF4ZVk5SlJNMV9zeGhOVXdCaXBXNk9YMTBCbVNQSG10bkZuTzIwQ2l1aDdYZWRKV29CY2tZRnA2WmVkNnlwUkY1X0UxQnVkRjZHZlIyclA5cTVNWGJ0T2FUZkhYRHJYRUpIdkNFRm5WYVFkUHZLbTJi?oc=5",
+    "published_date": "2026-09-11T11:50:35+00:00",
+    "matched_ticker": "STLTECH",
+    "fetch_timestamp": "2026-09-12T10:39:55.277445+00:00"
+  },
+  {
+    "title": "Sterlite Technologies Share Price Jumps 5% on Capex - Univest",
+    "source": "Google News/Univest",
+    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPR2UyUmVaTXdKQlNtazhTbUZHbE9fY3dDSFNOVmVUZUt5eWowMnZ0eDV1dlV5WDdFbE91bnB2TW15REN1LXR4aWFVM213dFZRWDlnQXNqdW9WMlNSOXhUTE1fb1FwdmhEaVNwdTNSSjdXSy1vWFBMOVFVdXdUeFBvUXBtenJkR2w4SHNTdg?oc=5",
+    "published_date": "2026-09-04T07:18:00+00:00",
+    "matched_ticker": "STLTECH",
+    "fetch_timestamp": "2026-09-12T10:39:55.277445+00:00"
+  },
+  {
+    "title": "Aeroflex Industries consolidated net profit rises 162.06% in the June 2026 quarter - Business Standard",
+    "source": "Google News/Business Standard",
+    "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNdThFN1U0LW5nMVVjdXhqbGo2NEFXSDJTUE9tQ1J4Z0RVZkh6Y2dIbWhranVaeGxVSFd0VU95R3k5ekd1T2xGMVVkWlJQY1hfeHFLbFBQc25TZ3oxYV9rTjV5MUpQcGdGNHVUV19lZTlrZVIwdVdCdUlCUGlGLW1VVlpPdzY1amliRGFXR3BKUVlpekdtYjN4dVFNYXNjWEhjaEliOEV3ZDJNMklZQ1VBSEJsbEdXeVA1VXZUQXJ0YVlDZmlJcl9ZTXdtTllQLTE0UEZKb0lIdXE4ZS1aZTF1WDZOa2FZLXMwZkY3eGMwYndrcG9HWVHSAfsBQVVfeXFMUEFTNGdyam1UbGxNOGt5RXhBTVhwSHlYM3pFVkJodVlKQ3VTTkVjby05QkNIN2FOVDc4Wm1PN1NuSDlsSHZWLXlpbGVvS1JlM0FINVl6c2dlNzJoRHI4WVVqcW14Q0F2OGxvRlExd3lvWnFsTWdJS3J5bDkySzdEU2VjakZIbW9MRGpTLVZ6Si1lZ3lwdHpCdVVhMGtleWtMRVZqcXVCZDBOM1RBUG4zNWhKWXFkRFdiTnVYVVZtU3ItUmVSVXZTZmRPNXJQZkNXQXpnV0F6bXdQdTdOM1ZyRlVsamszdUVSeEdGbjlWWWNuR1BaUXhOS2JXc3c?oc=5",
+    "published_date": "2026-07-28T07:00:00+00:00",
+    "matched_ticker": "AEROFLEX",
+    "fetch_timestamp": "2026-09-12T10:39:55.277445+00:00"
   }
 ]
