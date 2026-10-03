@@ -166,5 +166,61 @@
     "published_date": "2026-03-02T08:00:00+00:00",
     "matched_ticker": "AEROFLEX",
     "fetch_timestamp": "2026-10-03T16:11:20.456932+00:00"
+  },
+  {
+    "title": "KUANTUM Stock Price and Chart — NSE:KUANTUM - tradingview.com",
+    "source": "Google News/tradingview.com",
+    "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE1PT1hEYVFRM3FCbC1QQk1HY3BSZjlxMVpjcVRhS1loTUZaOGFyTUlIWW5Wem4zZTZTUVpnaDFybFJQRUg1ZDB2ZlRhMjJXZWVrZEp2eTZpN1poMkJf?oc=5",
+    "published_date": "2019-11-24T23:29:39+00:00",
+    "matched_ticker": "ORIENTPPR",
+    "fetch_timestamp": "2026-10-03T21:10:42.055202+00:00"
+  },
+  {
+    "title": "Tinna Rubber and Infrastructure Limited (TINNARUBR.NS) Stock Price, News, Quote & History - Yahoo! Finance Canada",
+    "source": "Google News/Yahoo! Finance Canada",
+    "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE4tZ1NIUEpqeEpzNEgwbGl6dWZ5VWRWaWtoekVTcENDek5OZ0Z5YjNLVGZaQ1psdnNaMDhnSF93ajdWTHR2S0NtdnRPalk1MFdRTG5DWFRZbEZXbl8z?oc=5",
+    "published_date": "2026-10-01T09:59:59+00:00",
+    "matched_ticker": "TINNARUBR",
+    "fetch_timestamp": "2026-10-03T21:10:42.055202+00:00"
+  },
+  {
+    "title": "Tinna Rubber Q1 Consolidated Net Profit At ₹20.6 Crore Versus ₹11.7 Crore YoY - Sahi",
+    "source": "Google News/Sahi",
+    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOaGlQVHR4akxRZFBwUml6aXB5N0JwV01JU2hlNi0ySEVpVkxfaEJEVkFyWkRoMUlrSnhWcS1kTW9XaWpTcHF5ZUpoUEdfSDI4ZVlXZFh6cmc3V01QTDVnVGROMmRUYmlRQWNadkM2ZVluSmJvM2RmeVJ2dXpYOGl5OFpYLXVOa0dMbndITjluOGd0RmtUQW1mTEJETExpM1lPMGhTSXRhcFY2REx4QmZ3T0JfeHk?oc=5",
+    "published_date": "2026-07-20T07:00:00+00:00",
+    "matched_ticker": "TINNARUBR",
+    "fetch_timestamp": "2026-10-03T21:10:42.055202+00:00"
+  },
+  {
+    "title": "PONNIERODE Stock Price and Chart — NSE:PONNIERODE - tradingview.com",
+    "source": "Google News/tradingview.com",
+    "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5kY1NxMEVnb0dfTlhvYlh3QWNBOUxXeWh5eWx0YVI5Vm0yaXJDRzZDeFBuR1E5YnhhUUtxbGNZY1FkNGlVU1hqODJSQThDZk90Ym1IVUc5ZnYzS0hqenBQdA?oc=5",
+    "published_date": "2017-10-16T02:23:06+00:00",
+    "matched_ticker": "KCPSUGIND",
+    "fetch_timestamp": "2026-10-03T21:10:42.055202+00:00"
+  },
+  {
+    "title": "Ador Welding (BSE:517041) Stock Price - Simply Wall Street",
+    "source": "Google News/Simply Wall Street",
+    "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFAzQ0dTM1IwekxuTGo1QTZuOWQwQnJPSnQwclRxRFpiM3NWMXE2Sk84VTFkdVZEVEdCcnZlb2tmeXdOV2EwdnAxVy1GdlVYcWs?oc=5",
+    "published_date": "2026-08-25T07:00:00+00:00",
+    "matched_ticker": "ADORWELD",
+    "fetch_timestamp": "2026-10-03T21:10:42.055202+00:00"
+  },
+  {
+    "title": "RUSTOMJEE Share Price Today - Keystone Realtors Stock Analysis - Equitypandit",
+    "source": "Google News/Equitypandit",
+    "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE02blV2MHEtcDBmN3dvd1VmQmpUcExYZUItOVNvUExqbUtaejNLa1Z2MlhMRDJHb00wSjJLQ2FGQWw4WUlOOWhESGM5X2RTc2VvbE1SWERmNFVmSU5RNXlB?oc=5",
+    "published_date": "2025-07-01T09:46:58+00:00",
+    "matched_ticker": "RUSTOMJEE",
+    "fetch_timestamp": "2026-10-03T21:10:42.055202+00:00"
+  },
+  {
+    "title": "Sugar stocks jump 20% as government raises ethanol price for blending in petrol by 25% - Firstpost",
+    "source": "Google News/Firstpost",
+    "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxORU5wcTNrNnlnUEF5aGxJQU9waUk3RloxanV3ZUNVdFp6SDR2S3RFMXNQV0xQbURNcjVUM0hSODc5MmxCYVJVOWZBSnFZQjFwY0VUSnZoeGF2NllQclp1cFFidWNPNGdkT2VmX3NYeG0yb0xqRHdxQk5DaDRHVUFLNHlZbU5IazNWdFZKcG1kaE00WGZhUFo1MVhhaUQtc2NzMER3cnlJY1kzelFmc2JhMF9nTlZkNUZhMFZ6a1dyeEIzQnhsY2l0TWl2aWU?oc=5",
+    "published_date": "2018-09-14T07:00:00+00:00",
+    "matched_ticker": "RAJSREESUG",
+    "fetch_timestamp": "2026-10-03T21:10:42.055202+00:00"
   }
 ]
