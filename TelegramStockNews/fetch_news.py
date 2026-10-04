@@ -19,15 +19,19 @@ Environment variables (all optional except where a feature is used):
     TELEGRAM_BOT_TOKEN  - Telegram bot token (for alerts)
     TELEGRAM_CHAT_ID    - Telegram chat id (for alerts)
     NEWSAPI_KEY         - NewsAPI.org API key (enables the NewsAPI source)
+    NEWS_TIMEZONE       - IANA timezone that defines "today" for the
+                          today-only filter (default: Asia/Kolkata)
 """
 
 import datetime
+import email.utils
 import hashlib
 import json
 import logging
 import os
 import re
 from urllib.parse import quote_plus
+from zoneinfo import ZoneInfo
 
 import feedparser
 import requests
@@ -66,6 +70,10 @@ RSS_FEEDS = [
 GOOGLE_NEWS_RSS = (
     "https://news.google.com/rss/search?q={query}&hl=en-IN&gl=IN&ceid=IN:en"
 )
+
+# Only articles published on "today" in this timezone are stored and alerted.
+# NSE stocks, so the Indian calendar day is what readers consider "today".
+NEWS_TIMEZONE = ZoneInfo(os.environ.get("NEWS_TIMEZONE", "Asia/Kolkata"))
 
 # Cap so a large first run doesn't send hundreds of Telegram messages.
 MAX_ALERTS_PER_RUN = 30
@@ -232,7 +240,9 @@ def fetch_google_news_articles(tickers):
         stock = (entry.get("name") or ticker or "").strip()
         if not stock:
             continue
-        query = quote_plus(f'"{stock}" stock')
+        # when:1d asks Google News for the last day only; the strict
+        # today-only filter in run() still applies on top of this.
+        query = quote_plus(f'"{stock}" stock when:1d')
         url = GOOGLE_NEWS_RSS.format(query=query)
         try:
             logger.info("Fetching Google News: %s", stock)
@@ -331,11 +341,48 @@ def fetch_newsapi_articles(tickers):
     return articles
 
 
+def parse_datetime(value):
+    """Parse an ISO 8601 or RFC 2822 date string into an aware datetime.
+
+    Naive values are assumed to be UTC. Returns None if unparseable.
+    """
+    if not value:
+        return None
+    value = value.strip()
+    dt = None
+    try:
+        # Python 3.11's fromisoformat accepts a trailing "Z".
+        dt = datetime.datetime.fromisoformat(value)
+    except ValueError:
+        try:
+            dt = email.utils.parsedate_to_datetime(value)
+        except (TypeError, ValueError):
+            return None
+    if dt is None:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=datetime.timezone.utc)
+    return dt
+
+
+def is_published_today(published_date, today):
+    """True only if the article's published date falls on ``today``.
+
+    ``today`` is a date in NEWS_TIMEZONE. Articles with a missing or
+    unparseable date are rejected, since we cannot prove they are fresh.
+    """
+    dt = parse_datetime(published_date)
+    if dt is None:
+        return False
+    return dt.astimezone(NEWS_TIMEZONE).date() == today
+
+
 # --- Storage ---------------------------------------------------------------
 def daily_data_path(now=None):
     """Return the path to today's per-day JSON data file."""
     now = now or datetime.datetime.now(datetime.timezone.utc)
-    return os.path.join(DATA_DIR, f"news_{now:%Y-%m-%d}.json")
+    local_now = now.astimezone(NEWS_TIMEZONE)
+    return os.path.join(DATA_DIR, f"news_{local_now:%Y-%m-%d}.json")
 
 
 def load_daily_data(path):
@@ -376,11 +423,21 @@ def run():
 
     now = datetime.datetime.now(datetime.timezone.utc)
     fetch_timestamp = now.isoformat()
+    today = now.astimezone(NEWS_TIMEZONE).date()
+    logger.info("Keeping only articles published on %s (%s).",
+                today, NEWS_TIMEZONE.key)
 
     new_entries = []
+    stale_count = 0
     for art in raw_articles:
         key = article_key(art["url"], art["title"])
         if key in seen:
+            continue
+
+        # Old (or undated) articles are never stored or shared. They are
+        # not marked as seen either; they can never become "today" again.
+        if not is_published_today(art["published_date"], today):
+            stale_count += 1
             continue
 
         # Sources that already know which stock they searched for (e.g. the
@@ -406,6 +463,7 @@ def run():
         }
         new_entries.append(entry)
 
+    logger.info("Skipped %d article(s) not published today.", stale_count)
     logger.info("Found %d new matching article(s).", len(new_entries))
 
     if not new_entries:
