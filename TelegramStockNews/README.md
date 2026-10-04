@@ -13,15 +13,19 @@ It is designed to run every 3 hours on **GitHub Actions**.
 2. **Filter** – Matches article title + summary against the watchlist
    keywords (company name + aliases), case-insensitively with word
    boundaries.
-3. **Dedup** – Tracks already-seen articles by URL (or a title hash when no
+3. **Today only** – Only articles whose published date falls on today's
+   date (in IST, `Asia/Kolkata`; override with the `NEWS_TIMEZONE` env var)
+   are stored and shared. Older articles, and articles without a parseable
+   published date, are skipped. Google News searches also add `when:1d`.
+4. **Dedup** – Tracks already-seen articles by URL (or a title hash when no
    URL is present) in `seen_urls.json`, committed to the repo so state
    survives across stateless Action runs.
-4. **Storage** – Appends matched articles to a per-day file
-   `data/news_YYYY-MM-DD.json`. Each entry includes `title`, `source`,
+5. **Storage** – Appends matched articles to a per-day file
+   `data/news_YYYY-MM-DD.json` (date in IST). Each entry includes `title`, `source`,
    `url`, `published_date`, `matched_ticker`, and `fetch_timestamp`.
-5. **Alerts** – Sends a formatted Telegram message for each new article,
+6. **Alerts** – Sends a formatted Telegram message for each new article,
    **batched into one message per run** when several are found.
-6. **Resilience** – A single dead feed or a failed Telegram send is logged
+7. **Resilience** – A single dead feed or a failed Telegram send is logged
    and skipped; it never fails the whole run.
 
 ## Files
