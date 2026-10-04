@@ -119,6 +119,16 @@
       "ticker": "TAC",
       "name": "TAC Infosec",
       "aliases": ["TAC Infosec", "TAC", "TAC Infosec Ltd", "TAC Security"]
+    },
+    {
+      "ticker": "SUGSLLOYD",
+      "name": "Sugs Lloyd",
+      "aliases": ["Sugs Lloyd", "Sugs Lloyd Ltd", "Sugs Lloyd Limited", "SUGSLLOYD"]
+    },
+    {
+      "ticker": "CRYOGENIC",
+      "name": "Cryogenic OGS",
+      "aliases": ["Cryogenic OGS", "Cryogenic OGS Ltd", "Cryogenic OGS Limited", "CRYOGENIC"]
     }
   ]
 }
