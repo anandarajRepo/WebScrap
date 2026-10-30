@@ -38,5 +38,237 @@
     "published_date": "2026-10-29T18:31:01+00:00",
     "matched_ticker": "PRAJIND",
     "fetch_timestamp": "2026-10-30T00:52:01.238028+00:00"
+  },
+  {
+    "title": "IndiGo shares rise 2% after Q2 losses narrow. What are Jefferies and other brokerages saying?",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/indigo-shares-rise-2-after-q2-losses-narrow-what-are-jefferies-and-other-brokerages-saying/articleshow/135343303.cms",
+    "published_date": "2026-10-30T04:22:18+00:00",
+    "matched_ticker": "NUVAMA",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Nifty rout hides a striking bull run: Smallcap universe gives 60 multibaggers since last Diwali",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/nifty-rout-hides-a-striking-bull-run-smallcap-universe-gives-60-multibaggers-since-last-diwali/articleshow/135343361.cms",
+    "published_date": "2026-10-30T04:21:06+00:00",
+    "matched_ticker": "STLTECH",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Trent shares soar 7% after Q2 results. Here’s why Elara Capital, Nuvama remain bullish on the Tata stock",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/trent-shares-soar-7-after-q2-results-heres-why-elara-capital-nuvama-remain-bullish-on-the-tata-stock/articleshow/135342724.cms",
+    "published_date": "2026-10-30T04:06:37+00:00",
+    "matched_ticker": "NUVAMA",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Suzlon Energy shares crash 10% as Nuvama, others slash target prices after Q2 margins disappoint. What lies ahead?",
+    "source": "Economic Times Markets",
+    "url": "https://economictimes.indiatimes.com/markets/stocks/news/suzlon-energy-shares-fall-4-as-nuvama-others-slash-target-prices-after-q2-margins-disappoint-what-lies-ahead/articleshow/135342553.cms",
+    "published_date": "2026-10-30T04:00:14+00:00",
+    "matched_ticker": "NUVAMA",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Suzlon Energy Shares Fall 9% as Net Profit Declines 69% for Q2 - India Infoline",
+    "source": "Google News/India Infoline",
+    "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQaFhLdWZPMS1qRUdGTnNDcjI2SmloNEtPYWFqUVlnS19SV2pZQUVtekZaY3VmamVrY3kwRzBtWHNXUGdsU2FhS1YtTG05UGgwVElNV0huQy0yM2xpSldfTDViVl8zRl83NHVUZmhnYkl3NElzS25RcldaSjU2clNGSkEyM1h5bnVGbjJJME9EWnFSRzN4WTlBMjl0U1J1cjhyT2t3V2NFY2I?oc=5",
+    "published_date": "2026-10-30T06:10:00+00:00",
+    "matched_ticker": "JNPR",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "What Adani Green Energy Holders Bought Into - Simply Wall St",
+    "source": "Google News/Simply Wall St",
+    "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOV2wyakhxZEhLN1k0VVdhMTJHUWdDUjZwdXBrV0dDRDI3TTZtUG5yT28wc3F4NGgyR1pHNnZlR2RmSWJ0UmdzOUVUald5ODdpMzBRczIzMnZpb3gyWWIyR0xPOEtTUWhoM2NxYW8xLXJuSDBvUk1YN204MU1zck9mcEZKeW1rUjRVQ1JMVHRvdHdmbGs3clRaOFFaeVQ2NC1JVDQyMVk2WUVjMlZTZE5VUzQ4SFUtREt5QXFpTFdWMS1tSG0zMVRfMGl0QdIB0AFBVV95cUxPcFFnd0xJU3J4aHJqU1ByaFVzeDBkdllBMFNZODBGaDhucURYMnhPMTRReVNnclc1NnRQY0tUc0g1YUVtbXVqZVJlLVI4ZHZCeEswR3V3a3VzOWthTV9sb091bWxhVjNOTGstTTB3RmRaeHRab0pZc1h2YWNINEg2NUhLVG1IbE5ZWE1UQlh1VVlGZmJBenpmSWN5LVZpeU5YRkNrNW1yN3FMOU81c0MtQm1VbXk4bGtJdGIxRk92eDRCM2ktMkJ0b0NnVWV6Q190?oc=5",
+    "published_date": "2026-10-30T07:44:36+00:00",
+    "matched_ticker": "JNPR",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Core4 Engineers Limited Share Price - Upstox",
+    "source": "Google News/Upstox",
+    "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5BZVdQbWduUlBJR3ZLaWhFeXhMLXJOTUtidDJ2MVIxYzk5SlJuS0I1SDlUN3U1dEpjbmJpdkpWSzNrWjlfdk9GcDRpUnlQZGhudWFEU3ZnUndhMmtXQzJhRjhnMmlna1V5LXFKSEkxUQ?oc=5",
+    "published_date": "2026-10-30T02:59:56+00:00",
+    "matched_ticker": "JNPR",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Q2 Results, Oct 30: Reliance Industries, Jio Platforms, BEL, IOCL, Varun Beverages, Bank of Baroda, NTPC Green, others to post earnings - Upstox",
+    "source": "Google News/Upstox",
+    "url": "https://news.google.com/rss/articles/CBMilgJBVV95cUxQV1Jvb19RYXc3al9YVWxYMmhVMVJHUmNlQnZWeVFTdUFGODJBWGVyZlBmMGs0QVJYVEVDZFV5cWgyZHdfbmZUbEItVHdYdExnMXVFZWVFZnNfV3lYVWgtSlFSc3JFaGxhaW42bDZ5VTd3cGFoZVJaU2pwcE0wNUdVWGE3NENPRVJzS0k3Vk01eGNYNzJCZERjZWJhOUZVN3NiQVg2UWFzd3NienFfRy1od09CczJWMnZ1Y1g4Mjc1eTdhVDJScXJLS0NPd2NNcFZSU3hRQXZQc0ZNeW9JbkpuZTFab3dLSl9YN3o4VTd0VWhBdVRBNjRJTGxaVUtON2hoTkNXZDFFZWlGdnFVWWxBTjJHTUE0Zw?oc=5",
+    "published_date": "2026-10-30T02:12:03+00:00",
+    "matched_ticker": "JNPR",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Khaitan & Co Advises BRLMs on Landmark NSE IPO Worth Rs 22,561.57 Crore - TradingView",
+    "source": "Google News/TradingView",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPblE2dWlicXRUUnJoZWxyNzE4R1kxMDZKZ0wyeVp2UHl6dURFd1BtQ0pjZmNCYVo2UGpuZHBHbl9sUjBEUF9DTGdCYmRVallLaFNHdHlhdkRwSXRGUmdOYnJSaktSNmpMR1VQVFB5c3UtbTU5MlJQZzhaMENqMm1mUU00WW51TzUydjN6Ui1RVjA2SGhXWWNNeFdiZE00RGlGcEcyRi1UdUY4M0Riaks1RjBlWnFWYUhackhVcGtNWG00SXFx?oc=5",
+    "published_date": "2026-10-30T02:31:00+00:00",
+    "matched_ticker": "NUVAMA",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "SFC Environmental Technologies IPO allotment today; check status on BSE, NSE and registrar - Moneycontrol.com",
+    "source": "Google News/Moneycontrol.com",
+    "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxOZ3E3aS1vYjkwVjVFSmtyZWxXMWFLbFpfdUQ3TVVNNFJFV1JTbGxhM2lHWEtySTVOelhSTXgwNkZUX05DY29zekpQWHROUVRYdkdySlpuTkZJZ2l1ZW9KejAxU2lMX0RIMzBxaEJ2UERLNFFQVFhxbjN2MXJoOXRnSjNIN3pmNEZMcldaY1RHVFY3RDY5LUFIcllKcVBSVTBFaUoyOUhhVVFCd0ZUZk1fNElyM0lHdG1NV2djZC03c0lxQUZUeTFLdV93elY0cDdySDhzTmYxSjNILWc5U2pMaERFMNIB6AFBVV95cUxOVHREdm5Reld1eXpCaVhvTG8xWC1PYl9iVF9XMlFuQjBwb1FNNnNkZHpUSTZGUlZzcExMRUlhWGZGS1VfT2s0RHIyM1NPY2ZCVlZQanB3c3BiSkdBcWVWSkJFNjRmT2xJaEpXWDJmZjh1SklMQnJrSWtObVFTNXdMN1hKZFA2Y0FxNHRHN05obmt0enJoSFRwTTQ2X0ZoS3Q1endERGpwTVNkeTh0N0xmZmtoTEFHMXREejZnXzhmT3RTakpUUGxrdVpDd3U1VWM3S3dVV3BMYVBjcW1PTnU0ZUFEdmt1YTV6?oc=5",
+    "published_date": "2026-10-30T06:50:08+00:00",
+    "matched_ticker": "NUVAMA",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Tembo Global Industries Limited (TEMBO.NS) Seasonal Returns Chart - Yahoo Finance - Yahoo! Finance Canada",
+    "source": "Google News/Yahoo! Finance Canada",
+    "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9jaFpTd2tKb3FFZFp6YmR0aFJHc2ZYU1Y4OHlxQ2RieWF2eGl2ZDk5X21TMFlqQjJPbVVFMTdkZkxxaExaZU02QzZnS3NVQnpGdnF0Z0J0SkQzMWtxTXZDUWFwaUVqYkE?oc=5",
+    "published_date": "2026-10-29T23:30:55+00:00",
+    "matched_ticker": "TEMBO",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Auto sector stocks today, October 30: Ola Electric falls 3.33%; Force Motors gains 2.28%, Ather Energy up 1.98% - Business Upturn",
+    "source": "Google News/Business Upturn",
+    "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxNbUVUbW1EWUF3eDVXT0Z5aUk4bF9xWGJtSVJSMUhpYUJoWGtfaFdtZnhSZnZEcm5fQUtDa08xRHNrZ1ZjQ1lybDhaUTZrcDhsRHFkTWhKcU1ydE9ITTBSX2V2OGhFdWVvVlFUbnIyZE0tRzlLcThENlpRMHlaX29JcEIxZzJoSXdMeWNkTDBwSjZsQnBwUzVNWVVYdzdKVEgyR3BubEk1REtuWTVMWjRpd0lJLXJBclhOekg4dllDVDItSUpaNEZ2UTl2aUE3Z3R6bUZodDdlREo2T29lY0h0MTN3UDNXTjBqSUJrbXBn?oc=5",
+    "published_date": "2026-10-30T06:05:40+00:00",
+    "matched_ticker": "LANDMARK",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Rajshree Sugars receives order dropping ₹62.83 cr excise proceedings - scanx.trade",
+    "source": "Google News/scanx.trade",
+    "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxON0lCQ1BhOFJCNzZMWGNQQms3TFlMVTcyeDJHWnpFcWVRa3ZWalk2OXFwSDdsRXRoOFhxVEQ5NldjRkttZUlmcDdhbVJQVTBNLXIwOC0xN24zSTc5VHlwZjVDUDhUVjBoZGJSXzVGUzN0MnlNVnpKWmU3dlpUc0ltZ1NsNDNCYzBqM0FZdjR1SFR5ZFhfVUFqMmdfVFhwdW9DcmhpT2kzVGRmU2VXX3hhaDVyVEc3TENMZVFyeU0yT1RWZw?oc=5",
+    "published_date": "2026-10-30T07:42:05+00:00",
+    "matched_ticker": "RAJSREESUG",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "STL Networks Revenue Rises 17%, Net Loss Narrows In Q2 - BW Businessworld",
+    "source": "Google News/BW Businessworld",
+    "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPMkpxR3JrUzZjX1RfVU41amw5TjE5RXJQWkJLSGJ5Y2s0MEpHY3dKNUdzTHJpY2FEc3pmMVNDaUk2U0RnTW9tajBMSl9xV0k2SmhJaXBrSlMwWG5ZVDQ1VUltSmItZ1lTZ3BtcUc0M1oyTHRNRGlpakN6T0RkU2lMTnJsd05EMEdTallOdEJKWm1VamR4ZnNDdXdfZno?oc=5",
+    "published_date": "2026-10-30T06:30:05+00:00",
+    "matched_ticker": "STLNETWORK",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "JIO PLATFORMS LIMITED Share Price - Upstox",
+    "source": "Google News/Upstox",
+    "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE4zTkFaaXgySXdfWkdtVEZGdDR6MnlveXpsdmt0TUp6emFuZWE5OEhMYkt2ckUxUmp3RnQ3Q1hPZ0hLckNQTjlFTWMyNFcwZDF0TUVqT2xHUU81MFZPQVJDNU5R?oc=5",
+    "published_date": "2026-10-30T07:53:12+00:00",
+    "matched_ticker": "STLNETWORK",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Bharti Airtel Share Price - Live NSE: BHARTIARTL Stock Price & Chart - Upstox",
+    "source": "Google News/Upstox",
+    "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5yVGN2YlBzbU5xc0FJSkctUlVUMzAzSHdiOENtSzV1TlJyZHhSVGZIVVVyUEw0MVpwMm1HVDRxOGM3akMyaGhNaUZUZ09TQ0N4b2Vjd3lLaW1DaEg4QXRJbU5BQjZJcjN3MGlBSQ?oc=5",
+    "published_date": "2026-10-30T08:16:45+00:00",
+    "matched_ticker": "STLNETWORK",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Why Sterlite Technologies shares hit 5% lower circuit today? Down 9% in 3 days - What's driving the crash? Buy or sell? - Livemint",
+    "source": "Google News/Livemint",
+    "url": "https://news.google.com/rss/articles/CBMijgJBVV95cUxOal82dkVPVWQ3QUVBc1gtZGJsRlh5NGpJOEpXVjhacVBQSUNVc1owMTJZbTk5cTVDUjR1UTlhTVZ1Q29zS1UteS1LdkRJdXhQckM2NzJvWXpHOXdNZWJLajV1VEFZZFFnNHZScVhjaGhqczJ6bC1tUEVwamxyQ0V3OEx0YzlqMzFSZEw3Sm1waENJZVRFMUNHNEFDVlVhVXJsN21fWGNmeFZQd2hkZmE0X3pQbndBN1ZPVVAxQ1FwV29PRHljTmJ5ekJORzY1c2tYcHV0OHNSUmVZbmJWdWhjakszUy1lMEV0d2VEN2RUVFh0UWpRNVk5ZldFbVc5c2x5bEVsc1E3Tzh0SUJjOUE?oc=5",
+    "published_date": "2026-10-30T04:18:49+00:00",
+    "matched_ticker": "STLTECH",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Sterlite Technologies Share Price Hits 5% Lower Circuit Today - Univest",
+    "source": "Google News/Univest",
+    "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxNNndYOWRxU3p6dEVxcFFSeDVpb3R3QVJFSzQzcFl3TUowZnpLTTlwWGtENHFlWFZ3U3lzVk8tQm1ZaVduUjEyRjVjcFRGaGZzaG5uMU9qVk9WTWo5Z0pabnpEVEtNcGdVUDZOc3JaX2RfOXR0Ykp6UXhKWkJ0dFN2RWwtNmM4S3BnbzQxNmFSNGZpMlF2X1Q1VWYxcFFUVmZsZ3RyQkZHUjd6aG9adGpHSGdnaDdWV1BpaEJ4eUFLZ2pud1U4X2NTVDYxWjh3dEc5cVY5Si0zMm9nb0dRUlZRQQ?oc=5",
+    "published_date": "2026-10-30T05:51:00+00:00",
+    "matched_ticker": "STLTECH",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Nifty rout hides a striking bull run: Smallcap universe gives 60 multibaggers since last Diwali - The Economic Times",
+    "source": "Google News/The Economic Times",
+    "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxPampiZ042b2M3bXFKOFc1UFFuaXJTUTJCT183YllwQVJMRkdMMDM4b1NpaDVyRzkzMG11UzhuUVVBamNvUURNZ0VRaFRIMzIxSmRRMWgtbVJNazhRc1dEclBYdXV2WE5vWTBHTlBSTFZ2SW9QRTc4cWNPRENZcG91OEpHN1YtTzFOWThOLU53aVBHNXN3SHViMjNpOGhkekRSZ3ptbDJKeGZ0aTg4amxubVNLa3paSnJ4TXd0eWlFMmV1cE44akpzdGJPT0hGQVQ0dkZUZGZ5UUg2d0RQci0wTjZwc2U0Qm5OM0phQnJQcXBNTHhvOF85MlA1dmLSAYICQVVfeXFMT1p3ZFM0VHRJTzVmaFAzc191UkNxRW9lNnY4UnZJTUF4UEJWOGc0VTA1VWV0NzRjSGxIelNSVW9KVlNCbTlreUIwVnVBOGJFQUR1Y0J3R2t0dDc4OF9hRjJ4X2dTVmlLampOOWQxSUM4RmNBalFGVk5NN1p3ZXVJSGpjSGU0SkFGQXFkYzAxQzZ4UVpvRmJjczRfZ1lBZndjOFhaa0p0dDZmVkdvdTBmNmVuWGh2b2h3MklXaTAwU2l2a1lLYzcyUnVSMnJWVFk0RTV6Rm9tLW1fUDA3TkNFcUtLVExsWkNFa2o1NDZyd3owNU5uSTk1bFNzQVlKTktzQUVB?oc=5",
+    "published_date": "2026-10-30T04:21:06+00:00",
+    "matched_ticker": "STLTECH",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Sterlite Technologies Ltd is Rated Hold - MarketsMojo",
+    "source": "Google News/MarketsMojo",
+    "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNTVlJc1JVSU40MUYzWG9PMFRPRWJNRmlhRjJCN0VWbGx6d21qeU1CSDBXZkJCUXBXTUdwR3dWcFRfM2g1Q2RraXhPRjMwYjc3ZjRMN0FPbHhKTmdyMFp6RTBDZjM1bXc2WTMzekt1dTRJY2hEYXZneVlGZng4bEV4dGUtUGgxZkRNS2hhUFlqQnJER0Nya0VRd0JEbnNzRThuVGxF?oc=5",
+    "published_date": "2026-10-30T05:37:01+00:00",
+    "matched_ticker": "STLTECH",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "DIVINE HIRA JEWELLERS LTD Share Price - Upstox",
+    "source": "Google News/Upstox",
+    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE02N3Y4dzZGY2k5MDFPcmE1SnZ2cGJwdXd0LThuVHRrWG54eFpMcUg2QkdYcWtTN1BsLUw1enIwYWZoRVB3VWFiV2hqcTkzdG5WbTdTZ09EQmMtSkhfbm1KeF9PVHNSTUd6WFF6R1FjVzh0UQ?oc=5",
+    "published_date": "2026-10-30T03:04:11+00:00",
+    "matched_ticker": "SKYGOLD",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Raymond Lifestyle H1 FY27 Revenue Rises 10 Pc to Rs 3,685 Cr - Indian Retailer",
+    "source": "Google News/Indian Retailer",
+    "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOa1FiZTdPeEwtU19RMEhDQXBhMFhzX1V5b0FHbmZPZkZGb3BnQnNLZVk1QnFWRURpdHY0TWN2N3RMdC1HS1VXbGRURlQ3Z1R4bTRmZElCLU1HU0o2bHh0eDBleFFCdE84Y3NIdlR2MTVWc01sZ3RrRkV5VzdsNnVCcnl2T3NIVlEwQ245THE5Nl9vWHUwaWtr?oc=5",
+    "published_date": "2026-10-30T06:51:15+00:00",
+    "matched_ticker": "SKYGOLD",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Praj Industries Q2 Profit Up 20% to ₹23.16 Cr; Income Rises - HDFC Sky",
+    "source": "Google News/HDFC Sky",
+    "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1reUZFQ21LUWpUWU1MakJack9aeVJELWtSZVcxTjlucUNEdHlfaWJIdkNxSDN2UURKZXN6elVkTVJRNkxpUVprZ25BQlZRejRKdjRhMkxPWkhmX1pEMGQ2Q19yQjIwOGFCRnNxSHNtVQ?oc=5",
+    "published_date": "2026-10-30T04:01:54+00:00",
+    "matched_ticker": "PRAJIND",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Praj Industries Q2FY27 Results: Net profit up 20% YoY to ₹232 million - scanx.trade",
+    "source": "Google News/scanx.trade",
+    "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQYTFzODFjNUYwdnZrejl0WDhhME1veGsxM3BzNVFnYkxoTHZycGZ5OUtLRjFYUTIzRXMzMnV6SzVJdXZRQVZxcmwyYlAxV1dSZ2JRTVZQeGZndjYwLV9ta0o0bThXekR5c0lPTjBROUtZeWtERHFHZ3RvNVZBZUNaWmN2LU9vM2JTbEhmLVdpdnpvUUxMSjQzRWxscE9RMU1vRGwxSE1IZkJRSGozQlViWUdDZlN0RXBo?oc=5",
+    "published_date": "2026-10-30T03:54:34+00:00",
+    "matched_ticker": "PRAJIND",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Praj Industries Q2: net profit rises 20.1% YoY to ₹23.17 Cr on flat revenue - Trade Brains",
+    "source": "Google News/Trade Brains",
+    "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxORHRwcFRJNHlzTFUzUXliWGVDc2FfcVZaUDdDNWw0T3FpV09laWNIRHZydWZzbjJveUpyRllVNms4U1k2Y1hEWmZKbE1UWmJrVmVMaUlxck9UWl9pZG5nc01LYmc3Ym9rWTdid0xBWHpFcVh5TkJ5dHgtWlZJaHhqY1VwMFpfNXJLdExDMndUbFhvVnhpZjRnS19wMkU1V1FQVFhUa0UyNEhKS25ySWFpaXMtejh3Tm5K?oc=5",
+    "published_date": "2026-10-30T07:07:53+00:00",
+    "matched_ticker": "PRAJIND",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Praj Industries reports consolidated H1-FY27 operating income of INR 15,648 Mn - Business Upturn",
+    "source": "Google News/Business Upturn",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQRkQ5bkk4U3RUT2FKNnN1enY2WG13NXE3cmRuaEphR1IxTVhRa3FvazU4Y1BUNTZKSnZhbzZnT2tEN0Eza0F6d0NJNDJ5b3pDRncyX182Nkt0T3BqSGdGWUdtZTU1WGJPRmxxY0RudXFjczJpRkJhazRheHlHU2xXc3FkeFoxLVlGdVQxbmVhN2pyRU9lTTBJeTh6Q3AzNEJ6YWNVYUxoa2szOG5Tek1mWlUtUWtSUQ?oc=5",
+    "published_date": "2026-10-30T03:45:06+00:00",
+    "matched_ticker": "PRAJIND",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "AI firm AM Intelligence seeks $3 billion financing for Nvidia chips order - Business Standard",
+    "source": "Google News/Business Standard",
+    "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNc3Q3ZW9UcGVCQWtZTUlkVlJIc2x4WWdYYmZHbFpVNnowdHhyMW1iNFl1LWI2VmI0TU9ad2N2VzkwclotVmVXcEg5OWtSdURmNHRiVVp1cWdyRl9vQnJ4THhULWJhQ0xUWDRGOGExeDJMMHpPbC1JY2ZDNGNqRUQ3TVhVM09mUUs4YjNnWjlwMXlsZHM1THVDUVhfaExKX3NTVlJ0NjNoV1BGZHhEZzc4d0xwWlVpM3QtUWc1UWliaXBDNExtQWxtdGJ0ZzdoVzMweWdMZk9jeUXSAd4BQVVfeXFMUGN3cDZWSmhkaHZMdTdGNS05UDdQYVpKNTNNMVdfSjBtZ0lSYjFNTzVMVTNtQmRpallyTm9YallYX01aWGoxWV9Pd0Jsbll0cjVXLWhmUVRmamVPeERub1BsTl9oRXV0aGFacFlqaG5XcUh3Z0ctb1BFckx5Z3p3aTFCcjctWUUwRjdBenVFbHdqMWd6MzhIeS16bkY4TWo1VTNSbDZIU2xmaTJaaS1MODh0NU9sNTZpQjVPY0JKa1hzcDBsQndFY0ZKVDJ3Vk4zclp6U2hOSDRLVDM4Ul9n?oc=5",
+    "published_date": "2026-10-30T02:31:48+00:00",
+    "matched_ticker": "AEROFLEX",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Robust Quarterly Earnings Drive Market Optimism as 747 Stocks Report Sep-2026 Results - MarketsMojo",
+    "source": "Google News/MarketsMojo",
+    "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxOSzBidjBQeURFMEE0ZVAyc2xGYldvT0FscWFlMWkzdHF6OFZKZzRGcUVjR1dUU1lkVTUtWGNldkN4R2UweHBxV1ZOMUFfZXF1YVlNeGNxYmVYc2k5ZEdiNTJMQk4xZnloRTFJWkc3aFYwYktFTVBoc1pQazZQa3ZfNVV2ZUlfSk1Ma1hUMWhHUV9NRWxHbklUZVBDZUdfaHlpQVBILXNsaC1lRHNSMXQ5MDBsbUJmc3pWZTgtNXpGa1ZRTlI1NE5xTzViZG1TZHZVam1DUHE5blNXSzNC?oc=5",
+    "published_date": "2026-10-29T18:35:39+00:00",
+    "matched_ticker": "AEROFLEX",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
+  },
+  {
+    "title": "Robust Quarterly Earnings Drive Market Optimism as 803 Stocks Report Sep-2026 Results - MarketsMojo",
+    "source": "Google News/MarketsMojo",
+    "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxNZ1RPQ1RLMFV4dG9iVHBTU2x5Y0dGUXdkNE9vN25GbjZWZUwteThSNWxTWk1XOTRKRVVucFFqck5oV0ZZLWluSnVxU1ZKVU9aOFVJei1ma0NCTC1UYk9IU0s5QXBsR0VjNEdWT21rVk1IY0VsZ21Xam1kVGxxdnVabWp6ZEh5cWU4czBUeGFMSVB3ajVka0hQTWhoUjFmZThkWFlnRXdyVzdPQlMxY2pQQ3dGQUJ6QU94bVlWVEM1clJWaTkxMlp5eUdDdGNlaGI0Y1EydnFqXzZpWGFq?oc=5",
+    "published_date": "2026-10-29T21:34:47+00:00",
+    "matched_ticker": "AEROFLEX",
+    "fetch_timestamp": "2026-10-30T09:54:31.295486+00:00"
   }
 ]
